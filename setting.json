@@ -1,0 +1,7 @@
+{
+    "MAG":{
+        "name": "mag",
+        "path": "./data",
+        "format": "MAGMSOSCIAVG"
+    }
+}
