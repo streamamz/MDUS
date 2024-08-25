@@ -1,0 +1,13 @@
+{
+    "MAG":{
+        "name":"mag",
+        "path":"/data/togawa/messenger/mag/mso-ave",
+        "format":"MAGMSOSCIAVG"
+    },
+    "figure":{
+        "path":"/home/togawa/main/develop/figure"
+    },
+    "data":{
+        "orbit":"/home/togawa/main/messenger/data/orbit/orbits.pkl"
+    }
+}
