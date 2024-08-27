@@ -1,7 +1,7 @@
 import pandas as pd
-from MDUS.Setting.setting import setting
+from MDUS.Data.data import orbit
 
-orbit = pd.read_pickle(setting["data"]["orbit"])
+orbit = orbit
 
 def convert_to_datetime(start,end):
     try:

@@ -8,6 +8,7 @@
         "path":"/home/togawa/main/develop/figure"
     },
     "data":{
-        "orbit":"/home/togawa/main/messenger/data/orbit/orbits.pkl"
+        "orbit":"./data/Orbit/orbits.pkl",
+        "dip":"./data/Dip/DipData.pkl"
     }
 }

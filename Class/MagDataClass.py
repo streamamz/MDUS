@@ -23,13 +23,13 @@ class MagData(Data):
 # それぞれ，Start Date, End Date, Original File, Input Fileとしてinfoフィールドに追加
 # End Dateの直後にsecをsecondとしてinfoフィールドに追加
 
-    def Input(self,start=None,end=None,orbit=None,sec=1):
+    def Input(self,start=None,end=None,orbit=None,sec=1,Rm=True):
         # startとendがどちらもNone，かつorbitがNoneの場合には例外を発生させる
         if sec not in [1,5,10,60]:
             raise ValueError("Error: sec must be 1, 5, 10, or 60")
-        if start == None and end == None and orbit == None:
+        if start is None and end is None and orbit is None:
             raise ValueError("Error: start, end, and orbit cannot be None at the same time")
-        startdate,enddate,ofile,pfile,result = ipm.maginput(start,end,orbit,sec)
+        startdate,enddate,ofile,pfile,result = ipm.maginput(start,end,orbit,sec,Rm)
         if orbit is not None:
             self.info["Orbit"] = orbit
         self.info["Start Date"] = startdate
@@ -39,7 +39,7 @@ class MagData(Data):
         self.info["Second"] = sec
         self.value = result      
 
-    def Plot(self,component=['|B|','Bx','By','Bz'],ds=None,de=None,filename=None):
+    def Plot(self,component=['|B|','Bx','By','Bz'],ds=None,de=None,filename=None,fsize=(9,3)):
 # componentには'|B|','Bx','By','Bz'以外が指定された場合には例外を発生させる
         if set(component) - set(['|B|','Bx','By','Bz']):
             raise ValueError("Error: component must be '|B|','Bx','By', or 'Bz'")
@@ -55,7 +55,7 @@ class MagData(Data):
                 colors.append('blue')
             else:
                 colors.append('green')
-        fig, ax = plm.plot_mag(self.value,component,colors,ds,de)
+        fig, ax = plm.plot_mag(self.value,component,colors,ds,de,fsize)
         if filename is not None:
             fig.tight_layout()
             fname = setting["figure"]["path"] + "/" + filename + ".png"
