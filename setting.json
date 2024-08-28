@@ -5,7 +5,7 @@
         "format":"MAGMSOSCIAVG"
     },
     "figure":{
-        "path":"/home/togawa/main/develop/figure"
+        "path":"/home/togawa/main/Research/figure"
     },
     "data":{
         "orbit":"./data/Orbit/orbits.pkl",
