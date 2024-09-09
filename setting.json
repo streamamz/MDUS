@@ -4,6 +4,11 @@
         "path":"/data/togawa/messenger/mag/mso-ave",
         "format":"MAGMSOSCIAVG"
     },
+    "FIPS_CDR_SCAN":{
+        "name":"scan",
+        "path":"/data/togawa/messenger/fips/cdr/scan"
+    }
+    ,
     "figure":{
         "path":"/home/togawa/main/Research/figure"
     },

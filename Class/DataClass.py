@@ -16,11 +16,11 @@ class Data:
             for key in self.info:
 # dictのvalueがlistの場合には，各要素を改行して表示する
                 if type(self.info[key]) == list:
-                    print(key)
+                    print("\033[31m" + key + "\033[0m")
                     for value in self.info[key]:
                         print("\t" + str(value))
                 else:
-                    print(key)
+                    print("\033[31m" + key + "\033[0m")
                     print("\t" + str(self.info[key]))
 # valueフィールドの中身を返すValueメソッドを定義する
     def Value(self):

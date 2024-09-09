@@ -1,7 +1,4 @@
 import pandas as pd
-from MDUS.Data.data import orbit
-
-orbit = orbit
 
 def convert_to_datetime(start,end):
     try:
