@@ -27,6 +27,7 @@ def scaninput(self,start=None,end=None,orbit=None,datatype="proton"):
             result = pd.concat([result,df])
         except FileNotFoundError:
             print("Error: " + file + " is not found")
+            return
     result = result.query('@startdate <= index <= @enddate')
     if orbit is not None:
         self.info["Orbit"] = orbit

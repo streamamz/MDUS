@@ -3,7 +3,7 @@ from MDUS.Class.DataClass import Data
 from MDUS.Class.MagDataClass import MagData
 from MDUS.Class.ScanDataClass import ScanData
 # data関連はここに追記していく
-from MDUS.Data.data import orbit, dip
+from MDUS.Data.data import *
 # 定数はここに追記していく
 from MDUS.Data.constant import *
 # input

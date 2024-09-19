@@ -14,6 +14,7 @@
     },
     "data":{
         "orbit":"./data/Orbit/orbits.pkl",
-        "dip":"./data/Dip/DipData.pkl"
-    }
+        "dip":"./data/Dip/DipData.pkl",
+        "diptype":"./data/Dip/DipClassification.pkl",
+        "Mercury":"./data/Mercury/MercuryData.pkl"    }
 }

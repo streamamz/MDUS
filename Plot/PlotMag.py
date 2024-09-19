@@ -23,8 +23,8 @@ def Plot(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},lege
         legend = component.keys()
     for comp,color,leg in zip(component.keys(),component.values(),legend):
         ax.plot(self.value.query('@ds <= index <= @de').index,self.value.query('@ds <= index <= @de')[comp],color=color,label=leg,linewidth=1)
-    # ax.legend(bbox_to_anchor=(1, 1), loc='upper left')
-    ax.legend()
+    ax.legend(bbox_to_anchor=(1, 1), loc='upper left')
+    # ax.legend()
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
     ax.set_xlabel("UTC")
     ax.set_ylabel("Magnetic Field [nT]")

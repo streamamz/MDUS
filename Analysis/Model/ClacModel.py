@@ -11,6 +11,7 @@ import pandas as pd
 
 from MDUS.Data import constant as const
 from MDUS.Class import MagDataClass
+from MDUS.Class import ScanDataClass
 
 control_param_path = '/home/togawa/main/messenger/module/control_params_v8b.json'
 fit_param_path = '/home/togawa/main/messenger/module/kth_own_cf_fit_parameters_opt_total_March23.dat'
@@ -57,3 +58,4 @@ def ClacKTH22(self,r_hel=None,DistIndex=50,
     self.value['|B|_KTH22'+rename_tmp] = Babs_model
 
 MagDataClass.MagData.CalcKTH22 = ClacKTH22
+ScanDataClass.ScanData.CalcKTH22 = ClacKTH22

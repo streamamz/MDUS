@@ -25,6 +25,8 @@ magicnumber_p = 1e-1
 magicnumber_t = 2
 # boltzman constant [m^2*kg*s^-2*K^-1]
 kb = 1.38e-23
+# magnetic constant
+mu0 = 1.26e-6
 # EQTAB
 EQTAB = [ 0.0464,  0.0511,  0.0564,  0.062 ,  0.0683,  0.0754, 0.0829,
          0.0913,  0.1004,  0.1107,  0.1219,  0.134 ,  0.1478, 0.1627,
