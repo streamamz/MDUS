@@ -28,6 +28,8 @@ def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
         ax.set_xlabel("UTC")
         ax.set_ylabel("Energy [keV/q]")
+        ax.set_yscale('log')
+        ax.set_ylim(0.1,20)
         ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
         ax.set_zorder(1)
         ax.patch.set_visible(False)

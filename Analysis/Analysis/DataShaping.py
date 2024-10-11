@@ -18,23 +18,32 @@ MagDataClass.MagData.MLAT = MLAT
 ScanDataClass.ScanData.MLAT = MLAT
 
 # 移動平均
-def MoveAverage(self,window=3,component=['Bx','By','Bz','|B|'],replace=True):
-    if window % 2 == 0:
-        window += 1
-    result = pd.DataFrame()
-    result['date'] = self.value.index.values.copy()[window//2:-window//2]
-    for cname in self.value:
-        if cname in component:
-            tmp = np.convolve(self.value[cname], np.ones(window)/window, mode='same').copy()[window//2:-window//2]
-        else:
-            tmp = self.value[cname].values.copy()[window//2:-window//2]
-        result[cname] = tmp
-    result = result.set_index('date')
-    if replace:
-        self.value = result
-        self.info['Move Average'] = window 
+# <- 古いコードは正しく動いていないことが確認
+# 代わりに, pandasのrollingを使う
+# <- 動いていた可能性あり（componentの指定忘れていた...）
+# def MoveAverage(self,window=3,component=['Bx','By','Bz','|B|'],replace=True):
+#     if window % 2 == 0:
+#         window += 1
+#     result = pd.DataFrame()
+#     result['date'] = self.value.index.values.copy()[window//2:-window//2]
+#     for cname in self.value:
+#         if cname in component:
+#             tmp = np.convolve(self.value[cname], np.ones(window)/window, mode='same').copy()[window//2:-window//2]
+#         else:
+#             tmp = self.value[cname].values.copy()[window//2:-window//2]
+#         result[cname] = tmp
+#     result = result.set_index('date')
+#     if replace:
+#         self.value = result
+#         self.info['Move Average'] = window 
+#     else:
+#         return result
+def MoveAverage(self,window=3,component=None):
+    if component is None:
+        self.value = self.value.rolling(window=window,center=True).mean()
     else:
-        return result
+        self.value[component] = self.value[component].rolling(window=window,center=True).mean()
+    self.info['Move Average'] = window
 MagDataClass.MagData.MoveAverage = MoveAverage
 ScanDataClass.ScanData.MoveAverage = MoveAverage
 
@@ -113,7 +122,7 @@ def NTP(self):
 ScanDataClass.ScanData.NTP = NTP
 
 # ∇ｘB電流の計算
-def rotBCurrent(self,ds=None,de=None):
+def rotBCurrent(self,ds=None,de=None,model=True):
     if self.info['Data Type'] == 'SCAN' and 'Data Integration' not in self.info.keys():
         self.DataIntegration()
     if ds is None or de is None:
@@ -130,9 +139,14 @@ def rotBCurrent(self,ds=None,de=None):
         y *= cst.Rm
         z *= cst.Rm
 
-    Bx = result['Bx'].values.copy() * 1e-9
-    By = result['By'].values.copy() * 1e-9
-    Bz = result['Bz'].values.copy() * 1e-9
+    if model:
+        Bx = result['Bx'].values.copy() * 1e-9 - result['Bx_KTH22'].values.copy() * 1e-9
+        By = result['By'].values.copy() * 1e-9 - result['By_KTH22'].values.copy() * 1e-9
+        Bz = result['Bz'].values.copy() * 1e-9 - result['Bz_KTH22'].values.copy() * 1e-9
+    else:
+        Bx = result['Bx'].values.copy() * 1e-9
+        By = result['By'].values.copy() * 1e-9
+        Bz = result['Bz'].values.copy() * 1e-9
 
     Jx_l = np.gradient(Bz, y) / cst.mu0
     Jx_r = -np.gradient(By, z) / cst.mu0
@@ -189,11 +203,19 @@ def DiamagCurrent(self,ds=None,de=None):
     Jy = []
     Jz = []
 
+    dpxs = []
+    dpys = []
+    dpzs = []
+
     for i in range(len(x)):
         if i == 0 or i == len(x)-1:
             Jx.append(np.nan)
             Jy.append(np.nan)
             Jz.append(np.nan)
+
+            dpxs.append(np.nan)
+            dpys.append(np.nan)
+            dpzs.append(np.nan)
         else:
             dx = x[i+1] - x[i-1]
             dy = y[i+1] - y[i-1]
@@ -207,6 +229,10 @@ def DiamagCurrent(self,ds=None,de=None):
             Jy.append((Bz[i]*dpx - Bx[i]*dpz) / Babs[i]**2)
             Jz.append((Bx[i]*dpy - By[i]*dpx) / Babs[i]**2)
 
+            dpxs.append(dpx)
+            dpys.append(dpy)
+            dpzs.append(dpz)
+
     # gradpx = np.gradient(pressure, x)
     # gradpy = np.gradient(pressure, y)
     # gradpz = np.gradient(pressure, z)
@@ -218,6 +244,10 @@ def DiamagCurrent(self,ds=None,de=None):
     result['Jx_diamag'] = Jx
     result['Jy_diamag'] = Jy
     result['Jz_diamag'] = Jz
+
+    result['gradPx'] = dpxs
+    result['gradPy'] = dpys
+    result['gradPz'] = dpzs
 
     self.value = pd.merge(self.value,result,how='left',left_index=True,right_index=True,suffixes=('', '_new'))
     self.value = self.value.drop(columns=[i for i in self.value.columns if '_new' in i])
