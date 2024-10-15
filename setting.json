@@ -7,6 +7,10 @@
     "FIPS_CDR_SCAN":{
         "name":"scan",
         "path":"/data/togawa/messenger/fips/cdr/scan"
+    },
+    "PCHANG":{
+        "name":"pchang",
+        "path":"/home/togawa/data/messenger/fips/pchang"
     }
     ,
     "figure":{
