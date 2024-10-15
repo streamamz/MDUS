@@ -8,6 +8,7 @@ from MDUS.Data.data import *
 # 定数はここに追記していく
 from MDUS.Data.constant import *
 # input
+import MDUS.Input.InputMag
 import MDUS.Input.InputScan
 import MDUS.Input.InputPchang
 # plot

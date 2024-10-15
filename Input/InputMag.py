@@ -5,13 +5,20 @@ from MDUS.Data.data import orbit as orbits
 import pandas as pd
 import numpy as np
 
+from MDUS.Class import MagDataClass
 
-def maginput(start,end,orbit=None,sec=1,Rm=True):
+def maginput(self,start=None,end=None,orbit=None,sec=1,Rm=True):
+    if sec not in [1,5,10,60]:
+        raise ValueError("Error: sec must be 1, 5, 10, or 60")
+    if start is None and end is None and orbit is None:
+        raise ValueError("Error: start, end, and orbit cannot be None at the same time")
+        
     if orbit is not None:
         startdate = pd.to_datetime(orbits.query('index == @orbit')['MP1'].values[0])
         enddate = pd.to_datetime(orbits.query('index == @orbit')['MP4'].values[0])
     else:
         startdate,enddate = ipf.convert_to_datetime(start,end)
+
     ofile = []
     pfile = []
     result = pd.DataFrame()
@@ -32,4 +39,18 @@ def maginput(start,end,orbit=None,sec=1,Rm=True):
         result.loc[:,'X_MSO'] /= cst.Rm
         result.loc[:,'Y_MSO'] /= cst.Rm
         result.loc[:,'Z_MSO'] /= cst.Rm
-    return startdate,enddate,ofile,pfile,result
+    
+    if orbit is not None:
+        self.info["Orbit"] = orbit
+    self.info["Start Date"] = startdate
+    self.info["End Date"] = enddate
+    self.info["Original File"] = ofile
+    self.info["Input File"] = pfile
+    self.info["Second"] = sec
+    if Rm:
+        self.info["unit"] = "Rm"
+    else:
+        self.info["unit"] = "km"
+    self.value = result          
+
+MagDataClass.MagData.Input = maginput
