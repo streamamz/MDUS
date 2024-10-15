@@ -9,6 +9,8 @@ from MDUS.Class import ScanDataClass
 
 # protonのみ対応
 def scaninput(self,start=None,end=None,orbit=None,datatype="proton"):
+    if start is None and end is None and orbit is None:
+        raise ValueError("Error: start, end, and orbit cannot be None at the same time")
     if orbit is not None:
         startdate = pd.to_datetime(orbits.query('index == @orbit')['MP1'].values[0])
         enddate = pd.to_datetime(orbits.query('index == @orbit')['MP4'].values[0])

@@ -7,7 +7,8 @@ import pandas as pd
 from MDUS.Class import MagDataClass
 from MDUS.Class import ScanDataClass
 
-def Plot(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},legend=None,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None):
+def Plot(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},legend=None,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,
+         xlabel="UTC",ylabel="Magnetic Field [nT]",title=None):
     if not all([i in self.value.columns for i in component.keys()]):
         raise ValueError("Error: did not find the component in the data")
     if ds is not None and de is not None:
@@ -26,9 +27,12 @@ def Plot(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},lege
     ax.legend(bbox_to_anchor=(1, 1), loc='upper left')
     # ax.legend()
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
-    ax.set_xlabel("UTC")
-    ax.set_ylabel("Magnetic Field [nT]")
-    ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    if title is None:
+        ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+    else:
+        ax.set_title(title)
     ax.set_zorder(2)
     ax.patch.set_visible(False)
     if filename is not None:

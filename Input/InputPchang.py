@@ -6,7 +6,13 @@ import numpy as np
 
 from MDUS.Class import PchangDataClass
 
+datatypes = ['H_PA', 'HE2_PA', 'HE_PA', 'NAGROUP_PA', 'OGROUP_PA']
+
 def pchanginput(self,start=None,end=None,orbit=None,datatype='H_PA'):
+    if datatype not in datatypes:
+        raise ValueError("Error: datatype must be 'H_PA', 'HE2_PA', 'HE_PA', 'NAGROUP_PA', or 'OGROUP_PA'")
+    if start is None and end is None and orbit is None:
+        raise ValueError("Error: start, end, and orbit cannot be None at the same time")
     if orbit is not None:
         startdate = pd.to_datetime(orbits.query('index == @orbit')['MP1'].values[0])
         enddate = pd.to_datetime(orbits.query('index == @orbit')['MP4'].values[0])
