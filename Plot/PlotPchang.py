@@ -31,7 +31,7 @@ def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e
         ax.set_yticks([0,90,180])
         hm = ax.pcolormesh(date,angles,np.ma.masked_less_equal(pdata.T,0),norm=LogNorm(),cmap=cmap)
         hm.set_clim(vmin,vmax)
-        cbar = plt.colorbar(hm,pad=0)
+        cbar = plt.colorbar(hm,pad=0.08)
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
         ax.set_xlabel("UTC")
         ax.set_ylabel("Pitch Angle [deg]")
