@@ -8,7 +8,7 @@ import numpy as np
 
 from MDUS.Class import PchangDataClass
 
-def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e7,vmax=1e11):
+def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e7,vmax=1e11,title=None):
     if ds is not None and de is not None:
         ds = pd.to_datetime(ds)
         de = pd.to_datetime(de)
@@ -31,11 +31,14 @@ def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e
         ax.set_yticks([0,90,180])
         hm = ax.pcolormesh(date,angles,np.ma.masked_less_equal(pdata.T,0),norm=LogNorm(),cmap=cmap)
         hm.set_clim(vmin,vmax)
-        cbar = plt.colorbar(hm,pad=0.08)
+        cbar = plt.colorbar(hm,pad=0)
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
         ax.set_xlabel("UTC")
         ax.set_ylabel("Pitch Angle [deg]")
-        ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+        if title is None:
+            ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+        else:
+            ax.set_title(title)
     if filename is not None:
         fig.tight_layout()
         fig.savefig(filename)

@@ -8,7 +8,7 @@ import pandas as pd
 from MDUS.Data.constant import EQTAB
 from MDUS.Class import ScanDataClass
 
-def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e5,vmax=1e9):
+def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e5,vmax=1e9,title=None):
     if ds is not None and de is not None:
         ds = pd.to_datetime(ds)
         de = pd.to_datetime(de)
@@ -30,7 +30,10 @@ def Plot(self,ds=None,de=None,filename=None,fsize=(9,3),fig=None,ax=None,vmin=1e
         ax.set_ylabel("Energy [keV/q]")
         ax.set_yscale('log')
         ax.set_ylim(0.1,20)
-        ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+        if title is None:
+            ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+        else:
+            ax.set_title(title)
         ax.set_zorder(1)
         ax.patch.set_visible(False)
         _, y_max = ax.get_ylim()
