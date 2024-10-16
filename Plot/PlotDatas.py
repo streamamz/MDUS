@@ -30,9 +30,13 @@ def Plot(self, legend=None,ds=None,de=None,filename=None,
             self.fig, self.axes[plotdata] = self.pchang.Plot(
                 ds = ds, de = de, fig=self.fig, ax=self.axes[plotdata], title="Pchang"
             )
-    self.fig.tight_layout()
     if ds is not None and de is not None:
         plt.suptitle(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
     else:
-        plt.suptitle("All Data")
+        ds = self.mag.value.index[0]
+        de = self.mag.value.index[-1]
+        plt.suptitle(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+    self.fig.tight_layout()
+    if filename is not None:
+        self.fig.savefig(filename,dpi=300)
 DatasClass.Datas.Plot = Plot
