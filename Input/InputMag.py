@@ -7,7 +7,6 @@ from MDUS.Convert.ConvertMag import magconvert
 import pandas as pd
 import numpy as np
 import os 
-import re
 from pathlib import Path
 
 from MDUS.Class import MagDataClass

@@ -30,5 +30,6 @@ def PlotOrbit(self,fig=None,ax=None,
     ax.plot(self.value[coor1].values,self.value[coor2].values,color='red')
     ax.set_xlabel(coor1 + ' [Rm]')
     ax.set_ylabel(coor2 + ' [Rm]')
+    return fig, ax
 
 MagDataClass.MagData.PlotOrbit = PlotOrbit
