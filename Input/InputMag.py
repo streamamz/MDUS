@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import os 
 import re
+from pathlib import Path
 
 from MDUS.Class import MagDataClass
 
@@ -65,22 +66,35 @@ def magload(self,start=None,end=None,orbit=None):
         except FileNotFoundError:
         # pikle fileがないときにはoriginal fileを探してくる
             print("Error: " + file + " is not found")
-            ofiles = os.listdir(setting["MAG"]["ofile_path"])
-            ofile_found = False
-            for ofile in ofiles:
-                m = re.match(r'MAGMSOSCIAVG(\d{2})(\d{3})_(\d{2}).*', ofile)
-                if not(int(m.group(1)) == year-2000 and int(m.group(2)) == day and int(m.group(3)) == sec):
-                    continue
-                else:
-                    print("Found original file. Convert to pickle file")
-                    ofile_found = True
-                    result, mapfile = magconvert(ofile,file,mapfile)
-        # ofileがないときにはエラー処理
-            if not ofile_found:
+            ofile_tmp = setting["MAG"]["format"] + str(year-2000)+str(day).zfill(3)+"_"+str(sec).zfill(2)
+            ofile_dir = Path(setting["MAG"]["ofile_path"])
+            ofile_path = [file for file in ofile_dir.rglob("*") if file.is_file() and ofile_tmp in file.name and 'TAB' in file.name]
+            if len(ofile_path) != 0:
+                print("Found original file. Convert to pickle file")
+                ofile.append(str(ofile_path[0]))
+                result, mapfile = magconvert(str(ofile_path[0]),file,mapfile)
+            else:
                 print("Error: There is no data file. Please download from PDS.")
-                # print("You need to download ")
                 self.value = None
                 return
+            # for ofile in ofile_path:
+            #     if ofile in 
+            # ofiles = os.listdir(setting["MAG"]["ofile_path"])
+            # ofile_found = False
+            # for ofile in ofiles:
+            #     m = re.match(r'MAGMSOSCIAVG(\d{2})(\d{3})_(\d{2}).*', ofile)
+            #     if not(int(m.group(1)) == year-2000 and int(m.group(2)) == day and int(m.group(3)) == sec):
+            #         continue
+            #     else:
+            #         print("Found original file. Convert to pickle file")
+            #         ofile_found = True
+            #         result, mapfile = magconvert(ofile,file,mapfile)
+        # ofileがないときにはエラー処理
+            # if not ofile_found:
+            #     print("Error: There is no data file. Please download from PDS.")
+            #     # print("You need to download ")
+            #     self.value = None
+            #     return
     result['|B|'] = np.sqrt(np.array(result['Bx'].values) ** 2 + np.array(result['By'].values) ** 2 + np.array(result['Bz'].values) ** 2)
     result = result[['X_MSO','Y_MSO','Z_MSO','Bx','By','Bz','|B|']].copy()
     result = result.query('@startdate <= index <= @enddate')

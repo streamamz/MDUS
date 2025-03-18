@@ -6,8 +6,7 @@ from MDUS.Setting.setting import setting
 from MDUS.Class import MagDataClass
 
 def magconvert(ofile,pfile,mapfile):
-    ifile = setting["MAG"]["ofile_path"] + "/" + ofile
-    tmp = pd.read_csv(ifile,header=None,sep='\s+')
+    tmp = pd.read_csv(ofile,header=None,sep='\s+')
 
     dates = []
     for i in tmp.itertuples():
@@ -32,6 +31,6 @@ def magconvert(ofile,pfile,mapfile):
     outdata = pd.DataFrame({'date':dates,'TIME_TAG':timetag,'NAVG':navg,'X_MSO':msox,'Y_MSO':msoy,'Z_MSO':msoz,'Bx':Bx,'By':By,'Bz':Bz,'DBx':DBx,'DBy':DBy,'DBz':DBz})
     outdata = outdata.set_index('date')
     outdata.to_pickle(pfile)
-    mapfile = pd.concat([mapfile,pd.DataFrame({'pfile':[pfile],'ofile':[ifile]})])
+    mapfile = pd.concat([mapfile,pd.DataFrame({'pfile':[pfile],'ofile':[ofile]})])
     return outdata, mapfile
     

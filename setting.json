@@ -1,8 +1,8 @@
 {
     "MAG":{
         "name":"mag",
-        "pfile_path":"/home/stream/main/MDUS_Develop",
-        "ofile_path":"/home/stream/main/MDUS_Develop/data",
+        "pfile_path":"/home/stream/data/mag/pfile",
+        "ofile_path":"/home/stream/data/mag/ofile",
         "format":"MAGMSOSCIAVG"
     }
 }
