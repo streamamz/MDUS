@@ -1,14 +1,43 @@
 # version 0.1.0
 __version__ = "0.1.0"
 
-# necessary imports
-import numpy as np
-import pandas as pd
+# spk file check
+import os
+from MDUS.Data.spkdownload import DownloadSPK
+library_dir = os.path.dirname(__file__)
+spkernel_files = [
+    'msgr_040803_150430_150430_od431sc_2.bsp',
+    'msgr_dyn_v600.tf',
+    'naif0012.tls',
+    'pck00010_msgr_v23.tpc'
+]
+def check_spkernel_files():
+    missing_files = []
+    for file in spkernel_files:
+        if not os.path.exists(os.path.join(library_dir, 'Data/spice_kernel', file)):
+            missing_files.append(file)
+    if missing_files:
+        print("Some spkernel files are missing")
+        print("You cannnot use some following functions:")
+        print("Missing files:")
+        for file in missing_files:
+            print("\t"+file)
+check_spkernel_files()
+
+# import data
+from MDUS.Data.data import *
 
 # import constant
-from .Constant import constant
+from MDUS.Constant.constant import *
 
 # import Classes
-from .Class.MagDataClass import MagData
-from .Class.ScanDataClass import ScanData
-from .Class.DatasClass import Datas
+from MDUS.Class.MagDataClass import MagData
+from MDUS.Class.ScanDataClass import ScanData
+from MDUS.Class.DatasClass import Datas
+
+# import LoadData
+from MDUS.LoadData import LoadMag
+from MDUS.LoadData import LoadScan
+
+# import Convert
+# from MDUS.Convert import ConvertMag

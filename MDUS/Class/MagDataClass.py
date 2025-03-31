@@ -1,8 +1,8 @@
 from MDUS.Class.DataClass import Data
 
 class MagData(Data):
-    def _init__(self):
+    def __init__(self):
         super().__init__()
         self.info["Data Type"] = "MAG"
     def Info(self):
-        super.Info()
+        super().Info()

@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+print("MDUS Packages")
+print(find_packages())
 # setup
 setup(
     name="MDUS",
@@ -15,6 +17,7 @@ setup(
         "numpy",
         "pandas",
         "matplotlib",
+        "requests",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

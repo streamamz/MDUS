@@ -1,2 +1,6 @@
 # __pycashe__は無視
 __pycache__/
+build/
+dist/
+*.egg-info/
+test/
