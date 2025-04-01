@@ -3,6 +3,7 @@ __version__ = "0.1.0"
 
 # spk file check
 import os
+import spiceypy as sp
 from MDUS.Data.spkdownload import DownloadSPK
 library_dir = os.path.dirname(__file__)
 spkernel_files = [
@@ -16,6 +17,8 @@ def check_spkernel_files():
     for file in spkernel_files:
         if not os.path.exists(os.path.join(library_dir, 'Data/spice_kernel', file)):
             missing_files.append(file)
+        else:
+            sp.furnsh(str(os.path.join(library_dir, 'Data/spice_kernel', file)))
     if missing_files:
         print("Some spkernel files are missing")
         print("You cannnot use some following functions:")
@@ -38,6 +41,17 @@ from MDUS.Class.DatasClass import Datas
 # import LoadData
 from MDUS.LoadData import LoadMag
 from MDUS.LoadData import LoadScan
+from MDUS.LoadData import LoadDatas
+
+# import Plot
+import MDUS.Plot.PlotMag
+import MDUS.Plot.PlotOrbit
+import MDUS.Plot.PlotScan
+# import MDUS.Plot.PlotPchang
+import MDUS.Plot.PlotDatas
+
+# Analysis関連
+from MDUS.Analysis import DataShaping
 
 # import Convert
 # from MDUS.Convert import ConvertMag

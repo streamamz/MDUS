@@ -6,17 +6,17 @@ class Datas(Data):
     def __init__(self,datatype=['MAG']):
         super().__init__()
         self.info["Data Type"] = 'Integrated Data'
-        self.data = {}
+        self.value = {}
         supdata = ["MAG","FIPS_CDR_SCAN"]
         dtmp = []
         for d in datatype:
             if d in supdata:
                 if d == "MAG":
-                    self.data[d] = MagData()
-                    self.data[d].Setting()
+                    self.value[d] = MagData()
+                    self.value[d].LoadSetting()
                 elif d == "FIPS_CDR_SCAN":
-                    self.data[d] = ScanData()
-                    self.data[d].Setting()
+                    self.value[d] = ScanData()
+                    self.value[d].LoadSetting()
                 dtmp.append(d)
             else:
                 print("Warning : non supportd data type : ",d)

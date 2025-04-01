@@ -1,5 +1,6 @@
 import requests
 import os
+import spiceypy as sp
 
 pckurl = "https://naif.jpl.nasa.gov/pub/naif/pds/data/mess-e_v_h-spice-6-v1.0/messsp_1000/data/pck/pck00010_msgr_v23.tpc"
 tlsurl = "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls"
@@ -15,7 +16,6 @@ spkernel_files = [
 
 library_dir = os.path.dirname(__file__)
 def DownloadSPK():
-    missing_files = []
     for file in spkernel_files:
         if not os.path.exists(os.path.join(library_dir,'spice_kernel', file)):
             print("Downloading: " + file)
@@ -35,6 +35,7 @@ def DownloadSPK():
                 with open(os.path.join(library_dir, 'spice_kernel', file), 'wb') as f:
                     f.write(response.content)
                 print("Successfully downloaded: " + file)
+                sp.furnsh(str(os.path.join(library_dir, 'spice_kernel', file)))
             else:
                 print("Failed to download: " + file)
         else:
