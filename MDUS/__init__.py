@@ -1,5 +1,5 @@
-# version 0.1.0
-__version__ = "0.1.0"
+# version 0.1.4
+__version__ = "0.1.5"
 
 # spk file check
 import os
@@ -52,6 +52,7 @@ import MDUS.Plot.PlotDatas
 
 # Analysis関連
 from MDUS.Analysis import DataShaping
+from MDUS.Analysis import CalcPhysics
 
 # import Convert
 # from MDUS.Convert import ConvertMag

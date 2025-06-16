@@ -1,4 +1,4 @@
-from MDUS.Class import DatasClass
+# from MDUS.Class import DatasClass
 
 #セッティングは各自に
 def datasload(self,start=None,end=None,orbit=None):
@@ -10,4 +10,4 @@ def datasload(self,start=None,end=None,orbit=None):
             tmp.append(d)
     self.info["Load Success"] = tmp
 
-DatasClass.Datas.Load = datasload
+# DatasClass.Datas.Load = datasload

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 
 import MDUS.Constant.constant as cst
 
@@ -40,6 +41,8 @@ def scanconvert(ofile,pfile,target):
         temp['mode'] = modes
         temp = temp.set_index('date')
         result[targets[i]] = temp
+
+        pfile = re.match(r"(.*/\d{4}_\d{3}_)", pfile).group(1)
 
         pfile_temp = pfile + targets[i] + '.pkl'
 

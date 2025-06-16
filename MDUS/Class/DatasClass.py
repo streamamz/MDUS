@@ -1,6 +1,9 @@
 from MDUS.Class.DataClass import Data
 from MDUS.Class.MagDataClass import MagData
 from MDUS.Class.ScanDataClass import ScanData
+#
+from MDUS.LoadData import LoadDatas
+from MDUS.Plot import PlotDatas
 
 class Datas(Data):
     def __init__(self,datatype=['MAG']):
@@ -23,3 +26,10 @@ class Datas(Data):
         self.info["Input Data"] = dtmp
     def Info(self):
         super().Info()
+
+    def Load(self,start=None,end=None,orbit=None):
+        LoadDatas.datasload(self,start=start,end=end,orbit=orbit)
+
+    def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
+        fig, ax = PlotDatas.Plot(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
+        return fig, ax

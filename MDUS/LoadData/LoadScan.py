@@ -6,18 +6,18 @@ from MDUS.Convert.ConvertScan import scanconvert
 import pandas as pd
 import numpy as np
 
-from MDUS.Class.ScanDataClass import ScanData
+# from MDUS.Class.ScanDataClass import ScanData
 
-def scansetting(self,target='Proton',quality=0):
+def scansetting(self,target='Proton',quality=0) -> None:
     if quality < 0:
         quality = "All"
     if target not in ["start","stop","VE","Proton","EP"]:
         raise ValueError("target must be start, stop, VE, Proton, or EP")
     self.info["Target"] = target
     self.info["Quality"] = quality
-ScanData.LoadSetting = scansetting
+# ScanData.LoadSetting = scansetting
 
-def scanload(self,start=None,end=None,orbit=None):
+def scanload(self,start=None,end=None,orbit=None) -> None:
         # 例外処理
     if start is None and end is None and orbit is None:
         raise ValueError("start, end, and orbit cannot be None at the same time")    
@@ -76,7 +76,7 @@ def scanload(self,start=None,end=None,orbit=None):
                 return 
             else:
                 print("Found original file. Convert to pickle file")  
-                df = scanconvert(o,p)
+                df = scanconvert(o,p,target)
                 result = pd.concat([result,df])
     if orbit is not None:
         self.info["Orbit"] = orbit
@@ -85,8 +85,9 @@ def scanload(self,start=None,end=None,orbit=None):
     self.info["Original File"] = ofile
     self.info["Input File"] = pfile
     if quality != 'All':
-        result = result.query('quality <= @quality')
+        # result = result.query('quality <= @quality')
+        result[cst.EQTAB] = result[cst.EQTAB].where(result['quality'] <= quality, np.nan)
     result = result.query('@startdate <= index <= @enddate')
     self.value = result
 
-ScanData.Load = scanload                         
+# ScanData.Load = scanload                         

@@ -6,9 +6,9 @@ import MDUS.Constant.constant as cst
 import pandas as pd
 import numpy as np
 
-from MDUS.Class.MagDataClass import MagData
+# from MDUS.Class.MagDataClass import MagData
 
-def magsetting(self,sec=1,unit="Rm"):
+def magsetting(self,sec=1,unit="Rm") -> None:
     if sec not in [1,5,10,60]:
         raise ValueError("sec must be 1, 5, 10, or 60")
     else:
@@ -18,9 +18,9 @@ def magsetting(self,sec=1,unit="Rm"):
         raise ValueError("unit must be Rm or km")
     else:
         self.info["Unit"] = unit
-MagData.LoadSetting = magsetting
+# MagData.LoadSetting = magsetting
 
-def magload(self,start=None,end=None,orbit=None):
+def magload(self,start=None,end=None,orbit=None) -> None:
     # 例外処理
     if start is None and end is None and orbit is None:
         raise ValueError("start, end, and orbit cannot be None at the same time")    
@@ -94,4 +94,4 @@ def magload(self,start=None,end=None,orbit=None):
     self.info["Original File"] = ofile
     self.info["Input File"] = pfile
     self.value = result     
-MagData.Load = magload
+# MagData.Load = magload

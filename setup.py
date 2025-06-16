@@ -1,11 +1,9 @@
 from setuptools import setup, find_packages
 
-print("MDUS Packages")
-print(find_packages())
 # setup
 setup(
     name="MDUS",
-    version = "0.1.0",
+    version = "0.1.5",
     author = "Takuro OGAWA",
     author_email = "polish.stream@gmail.com",
     description = "MDUS: MESSENGER's Data Using System",
@@ -18,6 +16,7 @@ setup(
         "pandas",
         "matplotlib",
         "requests",
+        "spiceypy",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

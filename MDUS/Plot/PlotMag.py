@@ -5,7 +5,7 @@ from matplotlib import dates as mdates
 import pandas as pd
 import matplotlib.ticker as ticker
 
-from MDUS.Class import MagDataClass
+# from MDUS.Class import MagDataClass
 
 def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},
                 ylabel='Magnetic Field [nT]',
@@ -15,7 +15,7 @@ def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black
     self.plotinfo['ylabel'] = ylabel
     if title is not None:
         self.plotinfo['title'] = title
-MagDataClass.MagData.PlotSetting = PlotSetting
+# MagDataClass.MagData.PlotSetting = PlotSetting
 
 def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
     if start is not None and end is not None:
@@ -49,13 +49,28 @@ def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
             self.value.query('@ds <= index <= @de')[j].values,
             color=i,label=j,linewidth=1
         )
+        
     ax.legend(bbox_to_anchor=(1, 1), loc='upper left')
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
+
+    # 軌道データ (x, y, z) を x 軸の tick ラベルに表示
+    ticks_labels = []
+    for time in self.value.query('@ds <= index <= @de').index:
+        x = self.value.loc[time, 'X_MSO']
+        y = self.value.loc[time, 'Y_MSO']
+        z = self.value.loc[time, 'Z_MSO']
+        label = f"{time.strftime('%H:%M')}\n{x:.2f}\n {y:.2f}\n {z:.2f}"
+        ticks_labels.append(label)
+        
+
+    ax.set_xticks(self.value.query('@ds <= index <= @de').index)
+    ax.set_xticklabels(ticks_labels)
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6))
+    
     ax.set_xlabel('UTC')
     ax.set_ylabel(ylabel)
     ax.set_title(title)
-    ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6))
     ax.set_zorder(2)
     return fig, ax 
 
-MagDataClass.MagData.Plot = Plot
+# MagDataClass.MagData.Plot = Plot

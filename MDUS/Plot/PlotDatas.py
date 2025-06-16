@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
 import matplotlib_inline.backend_inline
 matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
-from matplotlib import dates as mdates
 import pandas as pd
-import matplotlib.ticker as ticker
 
-from MDUS.Class import DatasClass
+# from MDUS.Class import DatasClass
 
 def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
     dtype = self.info["Load Success"]
@@ -34,4 +32,4 @@ def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
     plt.grid(False)
     return fig, ax
 
-DatasClass.Datas.Plot = Plot
+# DatasClass.Datas.Plot = Plot
