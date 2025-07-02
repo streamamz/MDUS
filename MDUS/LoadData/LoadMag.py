@@ -9,8 +9,8 @@ import numpy as np
 # from MDUS.Class.MagDataClass import MagData
 
 def magsetting(self,sec=1,unit="Rm") -> None:
-    if sec not in [1,5,10,60]:
-        raise ValueError("sec must be 1, 5, 10, or 60")
+    if sec not in [1,5,10,60,'raw']:
+        raise ValueError("sec must be 1, 5, 10, 60 or 'raw'")
     else:
         self.info["Second"] = sec
     
@@ -27,8 +27,8 @@ def magload(self,start=None,end=None,orbit=None) -> None:
 
     # 時刻処理
     if orbit is not None:
-        startdate = pd.to_datetime(orbits.query('index == @orbit')['MP1'].values[0])
-        enddate = pd.to_datetime(orbits.query('index == @orbit')['MP4'].values[0])
+        startdate = pd.to_datetime(orbits.query('index == @orbit')['BS1'].values[0])
+        enddate = pd.to_datetime(orbits.query('index == @orbit')['BS4'].values[0])
     else:
         startdate,enddate = ldf.convert_to_datetime(start,end)
 
@@ -59,8 +59,6 @@ def magload(self,start=None,end=None,orbit=None) -> None:
         tmp = ldf.found_ofile("MAG",year,day,sec)
         if len(tmp) == 0:
             print("Warning: Cannot find original file")
-            print("original data path may not be correct")
-            print("Please check the datapath.json file")
             self.value = None
             return
         ofile.append(str(ldf.found_ofile("MAG",year,day,sec)[-1]))
@@ -78,7 +76,7 @@ def magload(self,start=None,end=None,orbit=None) -> None:
                 return 
             else:
                 print("Found original file. Convert to pickle file")
-                df = magconvert(o,p)
+                df = magconvert(o,p,sec)
                 result = pd.concat([result,df])
     result['|B|'] = np.sqrt(np.array(result['Bx'].values) ** 2 + np.array(result['By'].values) ** 2 + np.array(result['Bz'].values) ** 2)
     result = result.query('@startdate <= index <= @enddate')

@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import patches
-from MDUS.Class import MagDataClass
+# from MDUS.Class import MagDataClass
 
 theta = np.arange(0,2*np.pi+0.01,0.01)
 
@@ -32,4 +32,4 @@ def PlotOrbit(self,fig=None,ax=None,
     ax.set_ylabel(coor2 + ' [Rm]')
     return fig, ax
 
-MagDataClass.MagData.PlotOrbit = PlotOrbit
+# MagDataClass.MagData.PlotOrbit = PlotOrbit
