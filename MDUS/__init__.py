@@ -52,7 +52,7 @@ import MDUS.Plot.PlotDatas
 
 # Analysis関連
 from MDUS.Analysis import DataShaping
-from MDUS.Analysis import CalcPhysics
+# from MDUS.Analysis import CalcPhysics
 
 # import Convert
 # from MDUS.Convert import ConvertMag

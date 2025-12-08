@@ -4,7 +4,7 @@ from MDUS.LoadData import LoadScan
 from MDUS.Plot import PlotScan
 from MDUS.Plot import PlotOrbit
 from MDUS.Analysis import DataShaping
-from MDUS.Analysis import CalcPhysics
+# from MDUS.Analysis import CalcPhysics
 
 class ScanData(Data):
     def __init__(self):
