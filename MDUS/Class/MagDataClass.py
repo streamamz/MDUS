@@ -4,6 +4,7 @@ from MDUS.LoadData import LoadMag
 from MDUS.Plot import PlotMag
 from MDUS.Plot import PlotOrbit
 from MDUS.Analysis import DataShaping
+from MDUS.Analysis import Model
 
 class MagData(Data):
     def __init__(self):
@@ -35,3 +36,7 @@ class MagData(Data):
         DataShaping.CTransform(self,coordinate,mag,replace)
     def MoveAverage(self,window=3,component=None) -> None:
         DataShaping.MoveAverage(self,window,component)
+    # Model
+    def CalcModel(self, model="KT17",
+                   Rsun=0.4, DI=50):
+        Model.CalcModel(self, model, Rsun, DI)

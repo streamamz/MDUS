@@ -17,6 +17,7 @@ setup(
         "matplotlib",
         "requests",
         "spiceypy",
+        "KT17",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -24,6 +24,8 @@ class Datas(Data):
             else:
                 print("Warning : non supportd data type : ",d)
         self.info["Input Data"] = dtmp
+    def __getitem__(self, key):
+        return self.value[key]
     def Info(self):
         super().Info()
 

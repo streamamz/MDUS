@@ -4,6 +4,7 @@ from MDUS.LoadData import LoadScan
 from MDUS.Plot import PlotScan
 from MDUS.Plot import PlotOrbit
 from MDUS.Analysis import DataShaping
+from MDUS.Analysis import Model
 # from MDUS.Analysis import CalcPhysics
 
 class ScanData(Data):
@@ -29,5 +30,9 @@ class ScanData(Data):
         DataShaping.GetPos(self,unit)
     def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
         DataShaping.CTransform(self,coordinate,mag,replace)
-    def CalcNTP(self):
-        CalcPhysics.CalcNTP(self)
+    # def CalcNTP(self):
+    #     CalcPhysics.CalcNTP(self)
+    # Model
+    def CalcModel(self, model="KT17",
+                   Rsun=0.4, DI=50):
+        Model.CalcModel(self, model, Rsun, DI)
