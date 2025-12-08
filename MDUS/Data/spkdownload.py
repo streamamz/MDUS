@@ -1,3 +1,5 @@
+# Warning: This file is old version of spkdownload.py.
+
 import requests
 import os
 import spiceypy as sp

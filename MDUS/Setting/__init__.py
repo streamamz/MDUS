@@ -12,6 +12,9 @@ datapath = {
     "FIPS_CDR_SCAN": {
         "pfile_path": "/data/messenger/scan/pfile",
         "ofile_path": "/data/messenger/scan/pfile"
+    },
+    "SPICE_KERNEL": {
+        "spk_path": "/data/messenger/spice_kernel"
     }
 }
 
