@@ -78,7 +78,7 @@ def magload(self,start=None,end=None,orbit=None) -> None:
                 print("Found original file. Convert to pickle file")
                 df = magconvert(o,p,sec)
                 result = pd.concat([result,df])
-    result['|B|'] = np.sqrt(np.array(result['Bx'].values) ** 2 + np.array(result['By'].values) ** 2 + np.array(result['Bz'].values) ** 2)
+    result['Btot'] = np.sqrt(np.array(result['Bx'].values) ** 2 + np.array(result['By'].values) ** 2 + np.array(result['Bz'].values) ** 2)
     result = result.query('@startdate <= index <= @enddate')
 
     if self.info["Unit"] == "Rm":

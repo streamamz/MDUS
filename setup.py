@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 # setup
 setup(
     name="MDUS",
-    version = "0.1.5",
+    version = "0.1.6",
     author = "Takuro OGAWA",
     author_email = "polish.stream@gmail.com",
     description = "MDUS: MESSENGER's Data Using System",
