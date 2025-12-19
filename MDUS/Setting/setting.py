@@ -9,4 +9,8 @@ def load_datapath_json():
     setting = json.load(setting)
     return setting
 
-setting = load_datapath_json()
+# とりあえず用
+def reload_setting():
+    global setting
+    setting = load_datapath_json()
+    print("Reloaded datapath setting from datapath.json")

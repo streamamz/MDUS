@@ -5,6 +5,9 @@ from MDUS.Spice.SpiceSetup import *
 # check spk files
 chech_spkfile()
 
+# datapath setting
+from MDUS.Setting.setting import reload_setting as ReloadDatapath
+
 # import data
 from MDUS.Data.data import *
 

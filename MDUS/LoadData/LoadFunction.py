@@ -1,7 +1,9 @@
-from MDUS.Setting.setting import setting
+from MDUS.Setting.setting import load_datapath_json
 
 import pandas as pd
 from pathlib import Path
+
+setting = load_datapath_json()
 
 # 文字列日付をpandasのdatetime型へ変換する関数
 def convert_to_datetime(start,end):

@@ -1,11 +1,12 @@
 import requests
 import os
 import spiceypy as sp
-from MDUS.Setting.setting import setting
+from MDUS.Setting.setting import load_datapath_json
 from pathlib import Path
 
 library_dir = os.path.dirname(__file__)
 
+setting = load_datapath_json()
 spfiles_url_path = os.path.join(library_dir, 'SPICE_DOWNLOAD.txt')
 spkfiles_path = setting["SPICE_KERNEL"]["spk_path"]
 
