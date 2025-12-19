@@ -1,5 +1,6 @@
 include README.md
 include LICENSE
 include MDUS/Data/orbits.pkl
+include MDUS/Data/datapath.json
 include MDUS/Spice/SPICE_DOWNLOAD.txt
 exclude .gitignore
