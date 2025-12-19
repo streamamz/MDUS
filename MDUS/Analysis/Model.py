@@ -1,4 +1,5 @@
 import KT17
+import numpy as np
 
 def CalcModel(self, model="KT17",
               Rsun=0.4, DI=50):
@@ -22,6 +23,13 @@ def CalcModel(self, model="KT17",
             self.value["Z_MSO"].values,
             Rsun=Rsun, DistIndex=DI
         )
-    self.value['Bx_model'] = x_model
-    self.value['By_model'] = y_model
-    self.value['Bz_model'] = z_model
+    Bx_name = "Bx_" + model
+    By_name = "By_" + model
+    Bz_name = "Bz_" + model
+    Btot_name = "Btot_" + model
+    self.value[Bx_name] = x_model
+    self.value[By_name] = y_model
+    self.value[Bz_name] = z_model
+    self.value[Btot_name] = np.sqrt(
+        x_model**2 + y_model**2 + z_model**2
+    )

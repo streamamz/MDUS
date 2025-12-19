@@ -63,3 +63,4 @@ def DownloadSPK(redownload=False):
                         f"      PATH_VALUES     = ( '{new}' )")
     with open(target_file, 'w') as file:
         file.write(text)
+    chech_spkfile()

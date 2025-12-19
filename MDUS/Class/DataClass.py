@@ -1,3 +1,5 @@
+import pandas as pd
+
 class Data:
     def __init__(self):
         self.info = {}
@@ -18,3 +20,18 @@ class Data:
                     else:
                         print("\033[34m" + key + "\033[0m")
                         print("\t" + str(self.info[key]))
+    def Value(self,start=None,end=None,inplace=False):
+        if start is None or end is None:
+            return self.value
+        try:
+            start = pd.to_datetime(start)
+            end = pd.to_datetime(end)
+        except ValueError:
+            raise ValueError("Error: start and end must be in the format of YYYY-MM-DD HH:MM:SS")
+        if start > end:
+            start,end = end,start
+        if inplace:
+            self.value = self.value.query("@start <= index <= @end")
+            return self.value
+        else:
+            return self.value.query("@start <= index <= @end")
