@@ -91,7 +91,7 @@ def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordi
         inv = ax.transData.inverted()
         data_x, data_y = inv.transform((center_x, center_y))
         labels = "UT\n" + rf"$X_{{{coordinate}}}$" + "\n" + rf"$Y_{{{coordinate}}}$" + "\n" + rf"$Z_{{{coordinate}}}$" 
-        ax.text(data_x-50, data_y+10, labels, fontsize=label_fontsize, ha='center', va='center', zorder=20)
+        ax.text(data_x-600, data_y+10, labels, fontsize=label_fontsize, ha='center', va='center', zorder=20)
         title_fontsize = 10
         # title
         # X軸の描画範囲
