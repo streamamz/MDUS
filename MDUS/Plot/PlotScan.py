@@ -10,6 +10,115 @@ import numpy as np
 from MDUS.Constant.constant import EQTAB
 # from MDUS.Class import ScanDataClass
 
+def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,2.5),vmin=1e5,vmax=1e9,coordinate='MSO',skip_labels=False):
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=fsize
+                              ,constrained_layout=True # 消すかも 
+                               ) 
+    if len(self.value.values) == 0:
+        print("Warning: No plot data")
+        return fig, ax
+    if start is not None and end is not None:
+        ds = pd.to_datetime(start)
+        de = pd.to_datetime(end)
+    else:
+        ds = self.value.dropna().index[0]
+        de = self.value.dropna().index[-1]   
+
+    # dataの準備
+    data_copy = self.value.copy()
+    data_copy[EQTAB] = data_copy[EQTAB].replace(0,1e-38)
+    pdata = data_copy[EQTAB].query('@ds <= index <= @de').values
+    date = data_copy.query('@ds <= index <= @de').index.values
+    x_tmp = np.arange(len(date))
+    # plot
+    if not pdata.size == 0:
+        cmap = plt.cm.jet
+        cmap.set_under('white')
+        cmap.set_bad('grey')
+        hm = ax.pcolormesh(x_tmp,EQTAB,pdata.T,norm=LogNorm(vmin,vmax),cmap=cmap)
+        hm.set_clim(vmin,vmax)
+        ax.set_ylabel("Energy [keV/q]")    
+        ax.set_yscale('log')
+        ax.set_ylim(0.2,20)
+        cbar = plt.colorbar(hm)
+        cbar.set_label(f"$1/s\cdot(keV/e)\cdot cm^2$")
+    else:
+        print("Warning: No plot data")
+        return fig, ax
+    # xlabel
+    # X軸の描画範囲
+    xmin, xmax = ax.get_xlim()
+    # Y軸の描画範囲
+    ymin, ymax = ax.get_ylim()
+    if not skip_labels:
+        columns = self.value.columns.values
+        columns = [str(col) for col in columns]
+        date_str = pd.to_datetime(date).strftime("%H:%M").tolist()
+        # coordinate
+        if any("X_" + coordinate in s for s in columns):
+            # 座標データがある場合
+            if any(coordinate in s for s in columns):
+                # 指定した座標系のデータがある場合
+                X = data_copy["X_" + coordinate].values
+                Y = data_copy["Y_" + coordinate].values
+                Z = data_copy["Z_" + coordinate].values
+                labels = "UT\n" + rf"$X_{{{coordinate}}}$" + "\n" + rf"$Y_{{{coordinate}}}$" + "\n" + rf"$Z_{{{coordinate}}}$" 
+            else:
+                # 指定した座標系のデータがない場合、MSOで代用
+                X = data_copy["X_MSO"].values
+                Y = data_copy["Y_MSO"].values
+                Z = data_copy["Z_MSO"].values
+                labels = "UT\n" + rf"$X_{{MSO}}$" + "\n" + rf"$Y_{{MSO}}$" + "\n" + rf"$Z_{{MSO}}$"
+            x_str = np.char.mod('%.2f', X)
+            y_str = np.char.mod('%.2f', Y)
+            z_str = np.char.mod('%.2f', Z)
+            x_ticks = [f'{d}\n{x}\n{y}\n{z:}' for d, x, y, z in zip(date_str, x_str, y_str, z_str)]
+        else:
+            x_ticks = date_str
+            labels = "UTC"
+        # ---
+        n_labels = len(date)
+        max_labels = 5
+        step = max(1, n_labels // max_labels)
+        tick_positions = list(range(0, n_labels, step))
+        tick_labels = [x_ticks[i] for i in tick_positions]
+        ax.set_xticks(tick_positions)
+        ax.set_xticklabels(tick_labels, rotation=0, ha='center')
+        renderer = fig.canvas.get_renderer()
+        pos = tick_positions[0]
+        label = ax.get_xticklabels()[0]
+        label_fontsize = label.get_fontsize()
+        bbox = label.get_window_extent(renderer=renderer)
+        center_x = bbox.x0 + bbox.width / 2
+        center_y = bbox.y0 + bbox.height / 2
+        inv = ax.transData.inverted()
+        data_x, data_y = inv.transform((center_x, center_y))
+        if any("X_" + coordinate in s for s in columns):
+            ax.text(data_x-40, ymin-0.112, labels, fontsize=label_fontsize, ha='center', va='center', zorder=20)
+        else:
+            ax.text(data_x-40, ymin-0.047, labels, fontsize=label_fontsize, ha='center', va='center', zorder=20)
+        # Y label
+        # ax.set_ylabel(ylabel)
+        # =============== #
+        title_fontsize = 10
+        # title
+        # X軸の描画範囲
+        xmin, xmax = ax.get_xlim()
+        # Y軸の描画範囲
+        ymin, ymax = ax.get_ylim()
+        # タイトルの位置（Y軸の最大値から少し上にオフセット）
+        title_y = ymax + 1
+        # 軌道番号（左端に左寄せ）
+        if "Orbit" in self.info.keys():
+            orbit_num = "Orbit: " + str(self.info["Orbit"])
+            ax.text(xmin, title_y, orbit_num, ha='left', va='bottom', fontsize=title_fontsize)
+        day = pd.to_datetime(date).strftime('%Y-%m-%d').tolist()[0]
+        # 日付（右端に右寄せ）
+        ax.text(xmax, title_y, day, ha='right', va='bottom', fontsize=title_fontsize)
+    return fig, ax
+
+# ----
 def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9):
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=fsize

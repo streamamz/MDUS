@@ -4,19 +4,116 @@ matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
 from matplotlib import dates as mdates
 import pandas as pd
 import matplotlib.ticker as ticker
+import numpy as np
 
 # from MDUS.Class import MagDataClass
 
-def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},
+def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','Btot':'black'},
                 ylabel='Magnetic Field [nT]',
+                coordinate='MSO',
                 title = None):
     self.plotinfo = {}
     self.plotinfo['component'] = component
     self.plotinfo['ylabel'] = ylabel
     if title is not None:
         self.plotinfo['title'] = title
-# MagDataClass.MagData.PlotSetting = PlotSetting
+    self.plotinfo['coordinate'] = coordinate
 
+# MagDataClass.MagData.PlotSetting = PlotSetting
+def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordinate='MSO',skip_labels=False):
+    if start is not None and end is not None:
+        ds = pd.to_datetime(start)
+        de = pd.to_datetime(end)
+    else:
+        ds = self.value.dropna().index[0]
+        de = self.value.dropna().index[-1]
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=fsize)   
+    # default setting
+    colors = ['black','red','blue','green']
+    comp = ['Btot','Bx','By','Bz']
+    ylabel = 'Magnetic Field [nT]'
+    # load setting
+    coordinate = "MSO"
+    if hasattr(self,'plotinfo'):
+        if 'component' in self.plotinfo.keys():
+            colors = self.plotinfo['component'].values()
+            comp = self.plotinfo['component'].keys()
+        if 'ylabel' in self.plotinfo.keys():
+            ylabel = self.plotinfo['ylabel']
+        if 'coordinate' in self.plotinfo.keys():
+            coordinate = self.plotinfo['coordinate']
+    # coordinate
+    columns = self.value.columns.values
+    exists = any(coordinate in s for s in columns)
+    if exists:
+        X = self.value["X_" + coordinate].values
+        Y = self.value["Y_" + coordinate].values
+        Z = self.value["Z_" + coordinate].values
+    else:
+        X = self.value["X_MSO"].values
+        Y = self.value["Y_MSO"].values
+        Z = self.value["Z_MSO"].values        
+    time = self.value.index.values
+
+    # plot
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=fsize)
+    
+    for i, j in zip(comp, colors):
+        ax.plot(
+            self.value[i].values,
+            color=j,
+            label=i,
+            linewidth=1
+        )
+    # xlabel
+    if not skip_labels:
+        x_str = np.char.mod('%.2f', X)
+        y_str = np.char.mod('%.2f', Y)
+        z_str = np.char.mod('%.2f', Z)
+        date_str = pd.to_datetime(time).strftime('%H:%M').tolist()
+        x_ticks = [f'{d}\n{x}\n{y}\n{z:}' for d, x, y, z in zip(date_str, x_str, y_str, z_str)]
+        n_labels = len(time)
+        max_labels = 5
+        step = max(1, n_labels // max_labels)
+        tick_positions = list(range(0, n_labels, step))
+        tick_labels = [x_ticks[i] for i in tick_positions]
+        ax.set_xticks(tick_positions)
+        ax.set_xticklabels(tick_labels, rotation=0, ha='center')
+        renderer = fig.canvas.get_renderer()
+        pos = tick_positions[0]
+        label = ax.get_xticklabels()[0]
+        label_fontsize = label.get_fontsize()
+        bbox = label.get_window_extent(renderer=renderer)
+        center_x = bbox.x0 + bbox.width / 2
+        center_y = bbox.y0 + bbox.height / 2
+        inv = ax.transData.inverted()
+        data_x, data_y = inv.transform((center_x, center_y))
+        labels = "UT\n" + rf"$X_{{{coordinate}}}$" + "\n" + rf"$Y_{{{coordinate}}}$" + "\n" + rf"$Z_{{{coordinate}}}$" 
+        ax.text(data_x-50, data_y+10, labels, fontsize=label_fontsize, ha='center', va='center', zorder=20)
+        title_fontsize = 10
+        # title
+        # X軸の描画範囲
+        xmin, xmax = ax.get_xlim()
+        # Y軸の描画範囲
+        ymin, ymax = ax.get_ylim()
+        # タイトルの位置（Y軸の最大値から少し上にオフセット）
+        title_y = ymax + 10
+        # 軌道番号（左端に左寄せ）
+        if "Orbit" in self.info.keys():
+            orbit_num = "Orbit: " + str(self.info["Orbit"])
+            ax.text(xmin, title_y, orbit_num, ha='left', va='bottom', fontsize=title_fontsize)
+        day = pd.to_datetime(time).strftime('%Y-%m-%d').tolist()[0]
+        # 日付（右端に右寄せ）
+        ax.text(xmax, title_y, day, ha='right', va='bottom', fontsize=title_fontsize)
+    # Y label
+    ax.set_ylabel(ylabel)
+    # legend
+    ax.legend(bbox_to_anchor=(1, 1), loc='upper left', fontsize=10)
+    # =============== #
+    return fig, ax
+# ----
 def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
     if start is not None and end is not None:
         ds = pd.to_datetime(start)
@@ -29,7 +126,7 @@ def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
 
     # default setting
     colors = ['black','red','blue','green']
-    comp = ['|B|','Bx','By','Bz']
+    comp = ['Btot','Bx','By','Bz']
     ylabel = 'Magnetic Field [nT]'
     title = ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S")
 

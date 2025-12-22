@@ -32,6 +32,9 @@ class Datas(Data):
     def Load(self,start=None,end=None,orbit=None):
         LoadDatas.datasload(self,start=start,end=end,orbit=orbit)
 
+    # def PlotAdvanced(self,start=None,end=None,fig=None,ax=None,fsize=None,coordinate='MSO'):
+    #     fig, ax = PlotDatas.PlotAdvanced(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,coordinate=coordinate)
+    #     return fig, ax
     def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
         fig, ax = PlotDatas.Plot(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
         return fig, ax

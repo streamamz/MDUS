@@ -12,18 +12,24 @@ class MagData(Data):
         self.info["Data Type"] = "MAG"
     def Info(self):
         super().Info()
+    def Value(self,start=None,end=None,dropna=False,inplace=False):
+        return super().Value(start,end,dropna,inplace)
     # LoadData
     def LoadSetting(self,sec=1,unit="Rm") -> None:
         LoadMag.magsetting(self,sec,unit)
     def Load(self,start=None,end=None,orbit=None) -> None:
         LoadMag.magload(self,start,end,orbit)
     # Plot
-    def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','|B|':'black'},
+    def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','Btot':'black'},
                     ylabel='Magnetic Field [nT]',
+                    coordinate='MSO',
                     title = None) -> None:
-        PlotMag.PlotSetting(self,component,ylabel,title)
-    def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
+        PlotMag.PlotSetting(self,component,ylabel,coordinate,title)
+    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
         fig, ax = PlotMag.Plot(self,start,end,fig,ax,fsize)
+        return fig, ax
+    def Plot(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordinate='MSO',skip_labels=False):
+        fig, ax = PlotMag.PlotAdvanced(self,start,end,fig,ax,fsize,coordinate,skip_labels)
         return fig, ax
     def PlotOrbit(self,fig=None,ax=None,
                   plane='XY',coordinate='MSO'):

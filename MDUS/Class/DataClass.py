@@ -20,18 +20,34 @@ class Data:
                     else:
                         print("\033[34m" + key + "\033[0m")
                         print("\t" + str(self.info[key]))
-    def Value(self,start=None,end=None,inplace=False):
-        if start is None or end is None:
+    def Value(self,start=None,end=None,dropna=False,inplace=False):
+        if start is None and end is None and not dropna and not inplace:
             return self.value
+        if start is None:
+            start = self.value.index.values[0]
+        if end is None:
+            end = self.value.index.values[-1]
+        # convert to datetime
         try:
             start = pd.to_datetime(start)
             end = pd.to_datetime(end)
         except ValueError:
             raise ValueError("Error: start and end must be in the format of YYYY-MM-DD HH:MM:SS")
+        # swap
         if start > end:
             start,end = end,start
+        # filter
         if inplace:
-            self.value = self.value.query("@start <= index <= @end")
+            if dropna:
+                self.value = self.value.query("@start <= index <= @end").dropna()
+            else:
+                self.value = self.value.query("@start <= index <= @end")
+            self.info["Start Date"] = start
+            self.info["End Date"] = end
             return self.value
         else:
-            return self.value.query("@start <= index <= @end")
+            if dropna:
+                return self.value.query("@start <= index <= @end").dropna()
+            else:
+                return self.value.query("@start <= index <= @end")
+
