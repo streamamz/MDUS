@@ -2,6 +2,7 @@ from MDUS.Setting.setting import load_datapath_json
 
 import pandas as pd
 from pathlib import Path
+import os
 
 setting = load_datapath_json()
 
@@ -27,6 +28,26 @@ def found_pfile(datatype,year,day,sec=None,target=None):
     pfile_path = setting[datatype]["pfile_path"] + "/" + pfile_tmp
     return pfile_path
 
+def foundfile_fast(root, ofile_tmp):
+    result = []
+    stack = [str(root)]
+
+    while stack:
+        current = stack.pop()
+        try:
+            with os.scandir(current) as it:
+                for entry in it:
+                    # まず名前だけで絞る（statしない）
+                    if ofile_tmp in entry.name and 'TAB' in entry.name:
+                        if entry.is_file():  # 条件通過後にだけ stat
+                            result.append(Path(entry.path))
+                    elif entry.is_dir():
+                        stack.append(entry.path)
+        except PermissionError:
+            pass
+
+    return result
+
 def found_ofile(datatype,year,day,sec=None):
     if datatype == "MAG":
         if sec == "raw":
@@ -36,5 +57,6 @@ def found_ofile(datatype,year,day,sec=None):
     elif datatype == "FIPS_CDR_SCAN":
         ofile_tmp = "FIPS_R" + str(year) + str(day).zfill(3) + "CDR"
     ofile_dir = Path(setting[datatype]["ofile_path"])
-    ofile_path = [file for file in ofile_dir.rglob("*") if file.is_file() and ofile_tmp in file.name and 'TAB' in file.name]
+    # ofile_path = [file for file in ofile_dir.rglob("*") if file.is_file() and ofile_tmp in file.name and 'TAB' in file.name]
+    ofile_path = foundfile_fast(ofile_dir, ofile_tmp)
     return ofile_path
