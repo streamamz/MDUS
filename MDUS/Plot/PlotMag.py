@@ -114,7 +114,7 @@ def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordi
     # =============== #
     return fig, ax
 # ----
-def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
+def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),pxlabel=True,ptitle=True):
     if start is not None and end is not None:
         ds = pd.to_datetime(start)
         de = pd.to_datetime(end)
@@ -164,9 +164,11 @@ def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
     ax.set_xticklabels(ticks_labels)
     ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6))
     
-    ax.set_xlabel('UTC')
+    if pxlabel:
+        ax.set_xlabel('UTC')
     ax.set_ylabel(ylabel)
-    ax.set_title(title)
+    if ptitle:
+        ax.set_title(title)
     ax.set_zorder(2)
     return fig, ax 
 

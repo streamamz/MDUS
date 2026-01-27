@@ -25,8 +25,8 @@ class MagData(Data):
                     coordinate='MSO',
                     title = None) -> None:
         PlotMag.PlotSetting(self,component,ylabel,coordinate,title)
-    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3)):
-        fig, ax = PlotMag.Plot(self,start,end,fig,ax,fsize)
+    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),pxlabel=True,ptitle=True):
+        fig, ax = PlotMag.Plot(self,start,end,fig,ax,fsize,pxlabel=pxlabel,ptitle=ptitle)
         return fig, ax
     def Plot(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordinate='MSO',skip_labels=False):
         fig, ax = PlotMag.PlotAdvanced(self,start,end,fig,ax,fsize,coordinate,skip_labels)

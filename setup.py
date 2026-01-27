@@ -1,9 +1,10 @@
 from setuptools import setup, find_packages
 
+print("Setting up MDUS package...")
 # setup
 setup(
     name="MDUS",
-    version = "0.1.6",
+    version = "0.1.7",
     author = "Takuro OGAWA",
     author_email = "polish.stream@gmail.com",
     description = "MDUS: MESSENGER's Data Using System",

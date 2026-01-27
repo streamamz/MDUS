@@ -19,8 +19,8 @@ class ScanData(Data):
     def Load(self,start=None,end=None,orbit=None) -> None:
         LoadScan.scanload(self,start,end,orbit)
     # Plot
-    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9):
-        fig, ax = PlotScan.Plot(self,start,end,fig,ax,fsize,vmin,vmax)
+    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
+        fig, ax = PlotScan.Plot(self,start,end,fig,ax,fsize,vmin,vmax,pxlabel=pxlabel,ptitle=ptitle)
         return fig, ax
     def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,coordinate='MSO',skip_labels=False):
         fig, ax = PlotScan.PlotAdvanced(self,start,end,fig,ax,fsize,vmin,vmax,coordinate,skip_labels)

@@ -119,7 +119,7 @@ def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,2.5),vmin=1
     return fig, ax
 
 # ----
-def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9):
+def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=fsize
                               ,constrained_layout=True # 消すかも 
@@ -162,15 +162,18 @@ def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9
             ax.set_xticks(data_copy.query('@ds <= index <= @de').index.values[ticks_num])
             ax.set_xticklabels(ticks_labels[ticks_num])
             # ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6))
-            ax.set_xlabel("UTC and Coordinate")
+            if pxlabel:
+                ax.set_xlabel("UTC and Coordinate")
         else:
             ax.xaxis.set_major_formatter(mdates.DateFormatter("%H:%M"))
             ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=6))
-            ax.set_xlabel("UTC")
+            if pxlabel:
+                ax.set_xlabel("UTC")
         # settings
         ax.set_yscale('log')
         ax.set_ylim(0.2,20)
-        ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
+        if ptitle:
+            ax.set_title(ds.strftime("%Y/%m/%d %H:%M:%S") + " - " + de.strftime("%Y/%m/%d %H:%M:%S"))
         cbar = plt.colorbar(hm)
         cbar.set_label(f"$1/s\cdot(keV/e)\cdot cm^2$")
     else:
