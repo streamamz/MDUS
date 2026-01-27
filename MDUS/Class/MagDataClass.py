@@ -40,8 +40,8 @@ class MagData(Data):
         DataShaping.GetPos(self,unit)
     def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
         DataShaping.CTransform(self,coordinate,mag,replace)
-    def MoveAverage(self,window=3,component=None) -> None:
-        DataShaping.MoveAverage(self,window,component)
+    def MoveAverage(self,window=3,replace=False,component=['Bx', 'By', 'Bz', 'DBx', 'DBy', 'DBz', 'Btot']) -> None:
+        DataShaping.MoveAverage(self,window,replace,component)
     # Model
     def CalcModel(self, model="KT17",
                    Rsun=0.4, DI=50):

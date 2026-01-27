@@ -60,3 +60,40 @@ def found_ofile(datatype,year,day,sec=None):
     # ofile_path = [file for file in ofile_dir.rglob("*") if file.is_file() and ofile_tmp in file.name and 'TAB' in file.name]
     ofile_path = foundfile_fast(ofile_dir, ofile_tmp)
     return ofile_path
+
+def convert_epoch_to_datetime(epoch,year,doy):
+    if year > 2013 and doy > 9:
+        year = "2011"
+        doy = "082"
+        hour = "15"
+        minute = "37"
+        second = "00"
+        epoch_original = 209382088.333
+        dt = pd.to_datetime(
+                year
+                + doy.zfill(3)
+                + hour.zfill(2)
+                + minute.zfill(2)
+                + second.zfill(2),
+                format="%Y%j%H%M%S"
+            )
+        dt -= pd.to_timedelta(epoch_original, unit='s')
+        dt += pd.to_timedelta(epoch, unit='s')
+    else:
+        year = "2011"
+        doy = "082"
+        hour = "15"
+        minute = "37"
+        second = "00"
+        epoch_original = 209382088.333
+        dt = pd.to_datetime(
+                year
+                + doy.zfill(3)
+                + hour.zfill(2)
+                + minute.zfill(2)
+                + second.zfill(2),
+                format="%Y%j%H%M%S"
+            )
+        dt -= pd.to_timedelta(epoch_original, unit='s')
+        dt += pd.to_timedelta(epoch, unit='s')
+    return dt

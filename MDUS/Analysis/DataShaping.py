@@ -87,10 +87,18 @@ def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
 # ScanDataClass.ScanData.CTransform = CTransform
 
 # 移動平均
-def MoveAverage(self,window=3,component=None)->None:
-    if component is None:
-        self.value = self.value.rolling(window=window,center=True).mean()
+def MoveAverage(self,window=3,replace=False,component=None)->None:
+    if replace:
+        if component is None:
+            self.value = self.value.rolling(window=window,center=True).mean()
+        else:
+            self.value[component] = self.value[component].rolling(window=window,center=True).mean()
     else:
-        self.value[component] = self.value[component].rolling(window=window,center=True).mean()
+        # ここをうまく書き直す
+        if component is None:
+            self.value = self.value.rolling(window=window,center=True).mean()
+        else:
+            for c in component:
+                self.value[c + "_smooth"] = self.value[c].rolling(window=window,center=True).mean()
     self.info['Move Average'] = window
 # MagDataClass.MagData.MoveAverage = MoveAverage

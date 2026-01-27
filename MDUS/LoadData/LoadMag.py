@@ -61,7 +61,7 @@ def magload(self,start=None,end=None,orbit=None) -> None:
             print("Warning: Cannot find original file")
             self.value = None
             return
-        ofile.append(str(ldf.found_ofile("MAG",year,day,sec)[-1]))
+        ofile.append(str(tmp[-1]))
 
     # ファイル読み込み
     for p, o, year, day in zip(pfile, ofile, years,days):

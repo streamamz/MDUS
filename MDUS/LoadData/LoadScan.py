@@ -61,7 +61,7 @@ def scanload(self,start=None,end=None,orbit=None) -> None:
             print("Please check the datapath.json file")
             self.value = None
             return
-        ofile.append(str(ldf.found_ofile("FIPS_CDR_SCAN",year,day)[-1]))
+        ofile.append(str(tmp[-1]))
     
     # 読み込むファイルの取得
     for p, o, year, day in zip(pfile, ofile, years,days):
