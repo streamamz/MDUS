@@ -4,7 +4,7 @@ print("Setting up MDUS package...")
 # setup
 setup(
     name="MDUS",
-    version = "0.1.7",
+    version = "0.1.8",
     author = "Takuro OGAWA",
     author_email = "polish.stream@gmail.com",
     description = "MDUS: MESSENGER's Data Using System",
