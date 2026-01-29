@@ -54,22 +54,6 @@ def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmi
     xticks_location = ax.get_xticks()
     new_labels = []
     xlabel_name = "UTC"
-    if spice_exist:
-        time = sp.str2et(np.array(xlabels))
-        ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
-        positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
-        xmso = positions[:,0] / Rm
-        ymso = positions[:,1] / Rm
-        zmso = positions[:,2] / Rm
-        for xlabel, x, y, z in zip(xlabels, xmso, ymso, zmso):
-            tmp = pd.to_datetime(xlabel).strftime('%H:%M:%S')
-            new_label = f"{tmp}\n{x:.2f}\n{y:.2f}\n{z:.2f}"
-            new_labels.append(new_label)
-        xlabel_name += "/X_MSO/Y_MSO/Z_MSO"
-    else:
-        new_labels = xlabels
-    ax.set_xticks(xticks_location)  
-    ax.set_xticklabels(new_labels, rotation=0, ha='center', va="top")
     # other settings
     if printother:
         if "Orbit" in self.info.keys():
@@ -78,6 +62,22 @@ def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmi
         dt = pd.to_datetime(self.value.query("@ds <= index <= @de").index.values[0]).strftime('%Y-%m-%d')
         ax.text(1.0, 1.0, dt, ha='right', va='bottom', transform=ax.transAxes)
     if printxticks:
+        if spice_exist:
+            time = sp.str2et(np.array(xlabels))
+            ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
+            positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
+            xmso = positions[:,0] / Rm
+            ymso = positions[:,1] / Rm
+            zmso = positions[:,2] / Rm
+            for xlabel, x, y, z in zip(xlabels, xmso, ymso, zmso):
+                tmp = pd.to_datetime(xlabel).strftime('%H:%M:%S')
+                new_label = f"{tmp}\n{x:.2f}\n{y:.2f}\n{z:.2f}"
+                new_labels.append(new_label)
+            xlabel_name += "/X_MSO/Y_MSO/Z_MSO"
+        else:
+            new_labels = xlabels
+        ax.set_xticks(xticks_location)  
+        ax.set_xticklabels(new_labels, rotation=0, ha='center', va="top")
         ax.set_xlabel(xlabel_name)
     return fig, ax
 
