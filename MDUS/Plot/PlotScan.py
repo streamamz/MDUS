@@ -7,8 +7,79 @@ import matplotlib.ticker as ticker
 import pandas as pd
 import numpy as np
 
-from MDUS.Constant.constant import EQTAB
+from MDUS.Spice.SpiceSetup import spice_exist
+from MDUS.Constant.constant import *
+import spiceypy as sp
 # from MDUS.Class import ScanDataClass
+
+def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmin=1e5,vmax=1e9, printxticks=True, printother=True):
+    # initial setting
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=fsize
+                              ,constrained_layout=True # 消すかも 
+                               ) 
+    if len(self.value.values) == 0:
+        print("Warning: No plot data")
+        return fig, ax
+    if start is not None and end is not None:
+        ds = pd.to_datetime(start)
+        de = pd.to_datetime(end)
+    else:
+        ds = self.value.dropna().index[0]
+        de = self.value.dropna().index[-1]   
+    # plot
+    data_copy = self.value.copy()
+    data_copy[EQTAB] = data_copy[EQTAB].replace(0,1e-38)
+    pdata = data_copy[EQTAB].query('@ds <= index <= @de').values
+    date = data_copy.query('@ds <= index <= @de').index.values
+    # plot
+    if not pdata.size == 0:
+        cmap = plt.cm.jet
+        cmap.set_under('white')
+        cmap.set_bad('grey')
+        hm = ax.pcolormesh(date,EQTAB,pdata.T,norm=LogNorm(vmin,vmax),cmap=cmap)
+        hm.set_clim(vmin,vmax)
+        ax.set_ylabel("Energy [keV/q]")    
+        ax.set_yscale('log')
+        ax.set_ylim(0.2,20)
+        cbar = plt.colorbar(hm)
+        cbar.set_label(f"$1/s\cdot(keV/e)\cdot cm^2$")
+    else:
+        print("Warning: No plot data")
+        return fig, ax
+    # ticks
+    ax.xaxis.set_major_locator(ticker.LinearLocator(5))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y/%m/%d %H:%M:%S"))
+    xlabels = [tick.get_text() for tick in ax.get_xticklabels()]
+    xticks_location = ax.get_xticks()
+    new_labels = []
+    xlabel_name = "UTC"
+    if spice_exist:
+        time = sp.str2et(np.array(xlabels))
+        ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
+        positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
+        xmso = positions[:,0] / Rm
+        ymso = positions[:,1] / Rm
+        zmso = positions[:,2] / Rm
+        for xlabel, x, y, z in zip(xlabels, xmso, ymso, zmso):
+            tmp = pd.to_datetime(xlabel).strftime('%H:%M:%S')
+            new_label = f"{tmp}\n{x:.2f}\n{y:.2f}\n{z:.2f}"
+            new_labels.append(new_label)
+        xlabel_name += "/X_MSO/Y_MSO/Z_MSO"
+    else:
+        new_labels = xlabels
+    ax.set_xticks(xticks_location)  
+    ax.set_xticklabels(new_labels, rotation=0, ha='center', va="top")
+    # other settings
+    if printother:
+        if "Orbit" in self.info.keys():
+            orbit_num = "Orbit: " + str(self.info["Orbit"])
+            ax.text(0, 1.0, orbit_num, ha='left', va='bottom', transform=ax.transAxes)
+        dt = pd.to_datetime(self.value.query("@ds <= index <= @de").index.values[0]).strftime('%Y-%m-%d')
+        ax.text(1.0, 1.0, dt, ha='right', va='bottom', transform=ax.transAxes)
+    if printxticks:
+        ax.set_xlabel(xlabel_name)
+    return fig, ax
 
 def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,2.5),vmin=1e5,vmax=1e9,coordinate='MSO',skip_labels=False):
     if fig is None or ax is None:

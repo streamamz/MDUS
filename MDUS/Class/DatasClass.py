@@ -36,5 +36,8 @@ class Datas(Data):
     #     fig, ax = PlotDatas.PlotAdvanced(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,coordinate=coordinate)
     #     return fig, ax
     def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
+        fig, ax = PlotDatas.PlotNew(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
+        return fig, ax
+    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
         fig, ax = PlotDatas.Plot(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
         return fig, ax

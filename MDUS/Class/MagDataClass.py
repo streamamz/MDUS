@@ -31,6 +31,9 @@ class MagData(Data):
     def Plot(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordinate='MSO',skip_labels=False):
         fig, ax = PlotMag.PlotAdvanced(self,start,end,fig,ax,fsize,coordinate,skip_labels)
         return fig, ax
+    def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5), printxticks=True, printother=True):
+        fig, ax = PlotMag.PlotNew(self, start, end, fig, ax, fsize, printxticks, printother)
+        return fig, ax
     def PlotOrbit(self,fig=None,ax=None,
                   plane='XY',coordinate='MSO'):
         fig, ax = PlotOrbit.PlotOrbit(self,fig,ax,plane,coordinate)

@@ -4,6 +4,7 @@ import spiceypy as sp
 from MDUS.Setting.setting import load_datapath_json
 from pathlib import Path
 
+spice_exist = True
 library_dir = os.path.dirname(__file__)
 
 setting = load_datapath_json()
@@ -21,6 +22,7 @@ def chech_spkfile():
                 print("Some SPICE kernel files are missing.")
                 print("So you cannnot use GetPos()")
                 print("Please run MDUS.DownloadSPK() to download the missing files.")
+                spice_exist = False
                 return
     # load spice kernel
     sp.furnsh(str(os.path.join(spkfiles_path, 'msgr_2015_v02.tm')))

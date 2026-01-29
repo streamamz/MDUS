@@ -6,6 +6,10 @@ import pandas as pd
 import matplotlib.ticker as ticker
 import numpy as np
 
+from MDUS.Spice.SpiceSetup import spice_exist
+from MDUS.Constant.constant import *
+import spiceypy as sp
+
 # from MDUS.Class import MagDataClass
 
 def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','Btot':'black'},
@@ -18,6 +22,77 @@ def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','Btot':'blac
     if title is not None:
         self.plotinfo['title'] = title
     self.plotinfo['coordinate'] = coordinate
+
+def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5), printxticks=True, printother=True):
+    # initial setting
+    if start is not None and end is not None:
+        ds = pd.to_datetime(start)
+        de = pd.to_datetime(end)
+    else:
+        ds = self.value.dropna().index[0]
+        de = self.value.dropna().index[-1]
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(figsize=fsize)   
+    colors = ['black','red','blue','green']
+    comp = ['Btot','Bx','By','Bz']
+    ylabel = 'Magnetic Field [nT]'
+    # load setting
+    coordinate = "MSO"
+    if hasattr(self,'plotinfo'):
+        if 'component' in self.plotinfo.keys():
+            colors = self.plotinfo['component'].values()
+            comp = self.plotinfo['component'].keys()
+        if 'ylabel' in self.plotinfo.keys():
+            ylabel = self.plotinfo['ylabel']
+        if 'coordinate' in self.plotinfo.keys():
+            coordinate = self.plotinfo['coordinate']
+
+    # plot
+    for i, j in zip(comp, colors):
+        ax.plot(
+            self.value.query("@ds <= index <= @de").index.values,
+            self.value.query("@ds <= index <= @de")[i].values,
+            color=j,
+            label=i,
+            linewidth=1
+        )    
+    # ticks
+    ax.xaxis.set_major_locator(ticker.LinearLocator(5))
+    # ax.xaxis.set_major_locator(ticker.MaxNLocator(nbins=7))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y/%m/%d %H:%M:%S"))
+    xlabels = [tick.get_text() for tick in ax.get_xticklabels()]
+    xticks_location = ax.get_xticks()
+    new_labels = []
+    xlabel_name = "UTC"
+    # other settings
+    if printother:
+        if "Orbit" in self.info.keys():
+            orbit_num = "Orbit: " + str(self.info["Orbit"])
+            ax.text(0, 1.0, orbit_num, ha='left', va='bottom', transform=ax.transAxes)
+        dt = pd.to_datetime(self.value.query("@ds <= index <= @de").index.values[0]).strftime('%Y-%m-%d')
+        ax.text(1.0, 1.0, dt, ha='right', va='bottom', transform=ax.transAxes)
+    ax.legend(bbox_to_anchor=(1, 1), loc='upper left')
+    if printxticks:
+        if spice_exist:
+            time = sp.str2et(np.array(xlabels))
+            ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
+            positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
+            xmso = positions[:,0] / Rm
+            ymso = positions[:,1] / Rm
+            zmso = positions[:,2] / Rm
+            for xlabel, x, y, z in zip(xlabels, xmso, ymso, zmso):
+                tmp = pd.to_datetime(xlabel).strftime('%H:%M:%S')
+                new_label = f"{tmp}\n{x:.2f}\n{y:.2f}\n{z:.2f}"
+                new_labels.append(new_label)
+            xlabel_name += "/X_MSO/Y_MSO/Z_MSO"
+        else:
+            new_labels = xlabels
+        ax.set_xticks(xticks_location)  
+        ax.set_xticklabels(new_labels, rotation=0, ha='center', va="top")
+        ax.set_xlabel(xlabel_name)
+    ax.set_ylabel(ylabel)
+    return fig, ax
+
 
 # MagDataClass.MagData.PlotSetting = PlotSetting
 def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordinate='MSO',skip_labels=False):

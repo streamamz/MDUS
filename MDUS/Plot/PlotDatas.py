@@ -34,6 +34,42 @@ import pandas as pd
 #                                     fsize=(12,3),
 #                                     coordinate=coordinate)
 #     return fig, ax
+def PlotNew(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
+    dtype = self.info["Load Success"]
+    if start is not None and end is not None:
+        ds = pd.to_datetime(start)
+        de = pd.to_datetime(end)    
+    else:
+        dss = []
+        des = []
+        for d in dtype:
+            dss.append(self.value[d].value.dropna().index.values[0])
+            des.append(self.value[d].value.dropna().index.values[-1])
+        ds = min(dss)
+        de = max(des) 
+    # fig, ax
+    if fsize is None:
+        fsize = (12,3*len(dtype))
+    if fig is None or ax is None:
+        fig, ax = plt.subplots(nrows=len(dtype),figsize=fsize,sharex=True,constrained_layout=True)
+    if len(dtype) == 1:
+        if background:
+            if dtype[i] == "FIPS_CDR_SCAN":
+                ax[i].set_facecolor('grey') 
+        self.value[dtype[0]].PlotNew(fig=fig,ax=ax,start=ds,end=de)       
+    else:
+        for i in range(len(dtype)):
+            if background:
+                if dtype[i] == "FIPS_CDR_SCAN":
+                    ax[i].set_facecolor('grey')
+            if i == 0:
+                self.value[dtype[i]].PlotNew(fig=fig,ax=ax[i],start=ds,end=de,printxticks=False,printother=True)
+            elif i == len(dtype)-1:
+                self.value[dtype[i]].PlotNew(fig=fig,ax=ax[i],start=ds,end=de,printother=False,printxticks=True)
+            else:
+                self.value[dtype[i]].PlotNew(fig=fig,ax=ax[i],start=ds,end=de,printxticks=False,printother=False)
+        # plt.grid(False)
+    return fig, ax  
 
 def Plot(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
     dtype = self.info["Load Success"]

@@ -21,7 +21,7 @@ def scanload(self,start=None,end=None,orbit=None) -> None:
         # 例外処理
     if start is None and end is None and orbit is None:
         raise ValueError("start, end, and orbit cannot be None at the same time")   
-    if orbit not in orbits.index.values:
+    if orbit is not None and orbit not in orbits.index.values:
         raise ValueError("No orbit data found") 
 
     # 時刻処理
