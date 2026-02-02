@@ -21,9 +21,11 @@ def found_pfile(datatype,year,day,sec=None,target=None):
     if datatype == "MAG":
         if sec == 'raw':
             pfile_tmp = str(year)+"_"+str(day).zfill(3)+"_raw.pkl"
+            datatype = "MAG_MSO"
         else:
             pfile_tmp = str(year)+"_"+str(day).zfill(3)+"_"+str(sec).zfill(2)+".pkl"
-    elif datatype == "FIPS_CDR_SCAN":
+            datatype = "MAG_MSO_AVE"
+    elif datatype == "FIPS_CDR_SCAN" or datatype == "FIPS_DDR_ESPEC":
         pfile_tmp = str(year) + "_" + str(day).zfill(3) + "_" + target + ".pkl"
     pfile_path = setting[datatype]["pfile_path"] + "/" + pfile_tmp
     return pfile_path
@@ -52,10 +54,14 @@ def found_ofile(datatype,year,day,sec=None):
     if datatype == "MAG":
         if sec == "raw":
             ofile_tmp = "MAGMSOSCI" + str(year-2000) + str(day).zfill(3)
+            datatype = "MAG_MSO"
         else:
             ofile_tmp = "MAGMSOSCIAVG" + str(year-2000)+str(day).zfill(3)+"_"+str(sec).zfill(2)
+            datatype = "MAG_MSO_AVE"
     elif datatype == "FIPS_CDR_SCAN":
         ofile_tmp = "FIPS_R" + str(year) + str(day).zfill(3) + "CDR"
+    elif datatype == "FIPS_DDR_ESPEC":
+        ofile_tmp = "FIPS_ESPEC_" + str(year) + str(day).zfill(3) + "_DDR"
     ofile_dir = Path(setting[datatype]["ofile_path"])
     # ofile_path = [file for file in ofile_dir.rglob("*") if file.is_file() and ofile_tmp in file.name and 'TAB' in file.name]
     ofile_path = foundfile_fast(ofile_dir, ofile_tmp)

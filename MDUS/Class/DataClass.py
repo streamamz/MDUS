@@ -17,6 +17,15 @@ class Data:
                         print("\033[34m" + key + "\033[0m")
                         for value in self.info[key]:
                             print("\t" + str(value))
+                    elif type(self.info[key]) == dict:
+                        print("\033[34m" + key + "\033[0m")
+                        for k in self.info[key]:
+                            if type(self.info[key][k]) == list:
+                                print("\t" + str(k) + " : ")
+                                for v in self.info[key][k]:
+                                    print("\t" + str(v))
+                            else:
+                                print("\t" + str(k) + " : " + str(self.info[key][k]))
                     else:
                         print("\033[34m" + key + "\033[0m")
                         print("\t" + str(self.info[key]))

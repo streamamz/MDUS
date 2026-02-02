@@ -12,7 +12,7 @@ from MDUS.Constant.constant import *
 import spiceypy as sp
 # from MDUS.Class import ScanDataClass
 
-def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmin=1e5,vmax=1e9, printxticks=True, printother=True):
+def Plot(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmin=1e5,vmax=1e9, printxticks=True, printother=True):
     # initial setting
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=fsize
@@ -190,7 +190,7 @@ def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,2.5),vmin=1
     return fig, ax
 
 # ----
-def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
+def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
     if fig is None or ax is None:
         fig, ax = plt.subplots(figsize=fsize
                               ,constrained_layout=True # 消すかも 

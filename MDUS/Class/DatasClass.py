@@ -1,6 +1,7 @@
 from MDUS.Class.DataClass import Data
 from MDUS.Class.MagDataClass import MagData
 from MDUS.Class.ScanDataClass import ScanData
+from MDUS.Class.EspecDataClass import EspecData
 #
 from MDUS.LoadData import LoadDatas
 from MDUS.Plot import PlotDatas
@@ -10,7 +11,7 @@ class Datas(Data):
         super().__init__()
         self.info["Data Type"] = 'Integrated Data'
         self.value = {}
-        supdata = ["MAG","FIPS_CDR_SCAN"]
+        supdata = ["MAG","FIPS_CDR_SCAN","FIPS_DDR_ESPEC"]
         dtmp = []
         for d in datatype:
             if d in supdata:
@@ -19,6 +20,9 @@ class Datas(Data):
                     self.value[d].LoadSetting()
                 elif d == "FIPS_CDR_SCAN":
                     self.value[d] = ScanData()
+                    self.value[d].LoadSetting()
+                elif d == "FIPS_DDR_ESPEC":
+                    self.value[d] = EspecData()
                     self.value[d].LoadSetting()
                 dtmp.append(d)
             else:
@@ -39,5 +43,5 @@ class Datas(Data):
         fig, ax = PlotDatas.PlotNew(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
         return fig, ax
     def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=None,background=False):
-        fig, ax = PlotDatas.Plot(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
+        fig, ax = PlotDatas.PlotOld(self,start=start,end=end,fig=fig,ax=ax,fsize=fsize,background=background)
         return fig, ax

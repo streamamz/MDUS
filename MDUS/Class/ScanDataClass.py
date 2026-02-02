@@ -19,14 +19,14 @@ class ScanData(Data):
     def Load(self,start=None,end=None,orbit=None) -> None:
         LoadScan.scanload(self,start,end,orbit)
     # Plot
-    def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
-        fig, ax = PlotScan.Plot(self,start,end,fig,ax,fsize,vmin,vmax,pxlabel=pxlabel,ptitle=ptitle)
-        return fig, ax
-    def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,coordinate='MSO',skip_labels=False):
-        fig, ax = PlotScan.PlotAdvanced(self,start,end,fig,ax,fsize,vmin,vmax,coordinate,skip_labels)
-        return fig, ax
-    def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmin=1e5,vmax=1e9, printxticks=True, printother=True):
-        fig, ax = PlotScan.PlotNew(self, start, end, fig, ax, fsize, vmin, vmax, printxticks, printother)
+    # def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,pxlabel=True,ptitle=True):
+    #     fig, ax = PlotScan.Plot(self,start,end,fig,ax,fsize,vmin,vmax,pxlabel=pxlabel,ptitle=ptitle)
+    #     return fig, ax
+    # def PlotNew(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),vmin=1e5,vmax=1e9,coordinate='MSO',skip_labels=False):
+    #     fig, ax = PlotScan.PlotAdvanced(self,start,end,fig,ax,fsize,vmin,vmax,coordinate,skip_labels)
+    #     return fig, ax
+    def Plot(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5),vmin=1e5,vmax=1e9, printxticks=True, printother=True):
+        fig, ax = PlotScan.Plot(self, start, end, fig, ax, fsize, vmin, vmax, printxticks, printother)
         return fig, ax
     def PlotOrbit(self,fig=None,ax=None,plane='XY',coordinate='MSO'):
         fig, ax = PlotOrbit.PlotOrbit(self,fig,ax,plane,coordinate)

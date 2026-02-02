@@ -11,16 +11,25 @@ def GetPos(self,unit='Rm') -> None:
     # Error 
     if not unit in ['Rm','km']:
         raise ValueError("unit must be Rm or km")
-    time = sp.str2et(self.value.index.values.astype('str'))
-    ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
-    positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
-    
-    if unit == 'Rm':
-        positions /= Rm
-
-    self.value['X_MSO'] = positions[:,0]
-    self.value['Y_MSO'] = positions[:,1]
-    self.value['Z_MSO'] = positions[:,2]
+    if self.info["Data Type"] == "FIPS_DDR_ESPEC":
+        time = sp.str2et(self.value[self.info["Target"][0]].index.values.astype('str'))
+        ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
+        positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
+        if unit == 'Rm':
+            positions /= Rm
+        for target in self.info["Target"]:
+            self.value[target]['X_MSO'] = positions[:,0]
+            self.value[target]['Y_MSO'] = positions[:,1]
+            self.value[target]['Z_MSO'] = positions[:,2]
+    else:
+        time = sp.str2et(self.value.index.values.astype('str'))
+        ptarg = sp.spkpos('MESSENGER',time,'J2000','NONE','MERCURY BARYCENTER')[0]
+        positions = np.array([sp.mxv(sp.pxform("J2000", "MSGR_MSO", t), pos) for t, pos in zip(time, ptarg)])
+        if unit == 'Rm':
+            positions /= Rm
+        self.value['X_MSO'] = positions[:,0]
+        self.value['Y_MSO'] = positions[:,1]
+        self.value['Z_MSO'] = positions[:,2]
 # MagDataClass.MagData.GetPos = GetPos
 # ScanDataClass.ScanData.GetPos = GetPos
 

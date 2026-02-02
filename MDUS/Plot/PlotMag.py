@@ -23,7 +23,7 @@ def PlotSetting(self,component={'Bx':'red','By':'blue','Bz':'green','Btot':'blac
         self.plotinfo['title'] = title
     self.plotinfo['coordinate'] = coordinate
 
-def PlotNew(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5), printxticks=True, printother=True):
+def Plot(self, start=None, end=None, fig = None, ax = None, fsize=(9,3.5), printxticks=True, printother=True):
     # initial setting
     if start is not None and end is not None:
         ds = pd.to_datetime(start)
@@ -189,7 +189,7 @@ def PlotAdvanced(self, start=None,end=None,fig=None,ax=None,fsize=(9,3.5),coordi
     # =============== #
     return fig, ax
 # ----
-def Plot(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),pxlabel=True,ptitle=True):
+def PlotOld(self,start=None,end=None,fig=None,ax=None,fsize=(9,3),pxlabel=True,ptitle=True):
     if start is not None and end is not None:
         ds = pd.to_datetime(start)
         de = pd.to_datetime(end)

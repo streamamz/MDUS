@@ -1,4 +1,4 @@
-__version__ = "0.1.8"
+__version__ = "0.2.1"
 
 # Spice setup
 from MDUS.Spice.SpiceSetup import *
@@ -17,6 +17,7 @@ from MDUS.Constant.constant import *
 # import Classes
 from MDUS.Class.MagDataClass import MagData
 from MDUS.Class.ScanDataClass import ScanData
+from MDUS.Class.EspecDataClass import EspecData
 from MDUS.Class.DatasClass import Datas
 
 # import LoadData

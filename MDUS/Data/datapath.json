@@ -1,11 +1,19 @@
 {
-    "MAG": {
-        "pfile_path": "/data/messenger/mag/pfile",
-        "ofile_path": "/data/messenger/mag/ofile"
+    "MAG_MSO_AVE": {
+        "pfile_path": "/data/messenger/mag_mso_ave/pfile",
+        "ofile_path": "/data/messenger/mag_mso_ave/ofile"
+    },
+    "MAG_MSO":{
+        "pfile_path": "/data/messenger/mag_mso/pfile",
+        "ofile_path": "/data/messenger/mag_mso/ofile"
     },
     "FIPS_CDR_SCAN": {
-        "pfile_path": "/data/messenger/scan/pfile",
-        "ofile_path": "/data/messenger/scan/pfile"
+        "pfile_path": "/data/messenger/fips_cdr_scan/pfile",
+        "ofile_path": "/data/messenger/fips_cdr_scan/ofile"
+    },
+    "FIPS_DDR_ESPEC": {
+        "pfile_path": "/data/messenger/fips_ddr_espec/pfile",
+        "ofile_path": "/data/messenger/fips_ddr_espec/ofile"
     },
     "SPICE_KERNEL": {
         "spk_path": "/data/messenger/spice_kernel"
