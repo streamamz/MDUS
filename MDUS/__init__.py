@@ -1,4 +1,4 @@
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 # Spice setup
 from MDUS.Spice.SpiceSetup import *
@@ -26,6 +26,11 @@ from MDUS.LoadData import LoadScan
 from MDUS.LoadData import LoadDatas
 
 # import Plot
+import sys
+if "ipykernel" in sys.modules:
+    print("Jupyter")
+    import matplotlib_inline.backend_inline
+    matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
 import MDUS.Plot.PlotMag
 import MDUS.Plot.PlotOrbit
 import MDUS.Plot.PlotScan

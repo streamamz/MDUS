@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-import matplotlib_inline.backend_inline
-matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
 import pandas as pd
 
 # 現在はPlotNewのみ使用
