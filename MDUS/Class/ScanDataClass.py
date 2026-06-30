@@ -40,5 +40,5 @@ class ScanData(Data):
     #     CalcPhysics.CalcNTP(self)
     # Model
     def CalcModel(self, model="KT17",
-                   Rsun=0.4, DI=50):
-        Model.CalcModel(self, model, Rsun, DI)
+                   Rsun=0.4, DI=50, aberrated=False) -> None:
+        Model.CalcModel(self, model, Rsun, DI, aberrated)

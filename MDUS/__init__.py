@@ -1,4 +1,4 @@
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 # Spice setup
 from MDUS.Spice.SpiceSetup import *
@@ -28,7 +28,6 @@ from MDUS.LoadData import LoadDatas
 # import Plot
 import sys
 if "ipykernel" in sys.modules:
-    print("Jupyter")
     import matplotlib_inline.backend_inline
     matplotlib_inline.backend_inline.set_matplotlib_formats("svg")
 import MDUS.Plot.PlotMag
@@ -40,6 +39,7 @@ import MDUS.Plot.PlotDatas
 # Analysis関連
 from MDUS.Analysis import DataShaping
 from MDUS.Analysis import Model
+from MDUS.Analysis.Model import TraceField
 # from MDUS.Analysis import CalcPhysics
 
 # import Convert

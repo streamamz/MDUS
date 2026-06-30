@@ -36,7 +36,7 @@ def GetPos(self,unit='Rm') -> None:
 # 座標変換用メソッド
 def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
     # Error
-    if not coordinate in ['MSM','aMSM','MCOOR']:
+    if not coordinate in ['MSM','aMSO','aMSM','MCOOR']:
         raise ValueError("Error: coordinate must be MSM, aMSM or MCOOR")
     # --- #
     x = self.value['X_MSO'].values.copy()
@@ -51,6 +51,33 @@ def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
         self.value['Y_MSM'] = y
         self.value['Z_MSM'] = z
         coordinate_name = np.array(['X_MSM','Y_MSM','Z_MSM'])
+    # aberatted-MSO coordinate
+    if coordinate == 'aMSO':
+        et = sp.str2et(self.value.index.values.astype('str')[0])
+        r_hel = np.array(sp.spkpos('199',et,'J2000','NONE','SUN')[0])
+        r_hel = np.sqrt(np.dot(r_hel,r_hel))
+        beta = np.arctan(-np.sqrt(G*M*(2/(r_hel*1e3) - 1/(smaxis*1e3))) * 1e-3/vsw)
+        rotvector = np.array([
+            [np.cos(beta), np.sin(beta), 0],
+            [-np.sin(beta), np.cos(beta), 0],
+            [0, 0, 1]
+        ])
+        points = np.vstack([x,y,z])
+        rotated_points = rotvector @ points
+        self.value['X_aMSO'] = rotated_points[0]
+        self.value['Y_aMSO'] = rotated_points[1]
+        self.value['Z_aMSO'] = rotated_points[2] + 0.2
+        if mag:
+            if 'Bx' in self.value.columns:
+                bx = self.value['Bx'].values.copy()
+                by = self.value['By'].values.copy()
+                bz = self.value['Bz'].values.copy()
+                points = np.vstack([bx,by,bz])
+                rotated_points = rotvector @ points
+                self.value['Bx_aMSO'] = rotated_points[0]
+                self.value['By_aMSO'] = rotated_points[1]
+                self.value['Bz_aMSO'] = rotated_points[2]
+        coordinate_name = np.array(['X_aMSO','Y_aMSO','Z_aMSO'])
     # aberatted-MSM coordinate
     if coordinate == 'aMSM':
         et = sp.str2et(self.value.index.values.astype('str')[0])
@@ -81,7 +108,7 @@ def CTransform(self,coordinate='MSM',mag=True,replace=False) -> None:
     # Magnetic coordinate
     if coordinate == 'MCOOR':
         r = np.sqrt(x**2 + y**2 + z**2)
-        theta = 90 - np.rad2deg(np.arccos(z/r))
+        theta = np.rad2deg(np.arcsin(z/r))
         phi = np.rad2deg(np.arctan2(y,x))
         phi = np.where(phi < 0, phi+360, phi)
         self.value['R_MSM'] = r
